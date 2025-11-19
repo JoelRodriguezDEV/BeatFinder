@@ -11,7 +11,7 @@ Esta versión no solo busca canciones; te sumerge en ellas con un visualizador d
 
 ## 🌐 Accede al proyecto online
 
-🔗 [https://joel-d-rodriguez.github.io/Find-my-songz](https://joel-d-rodriguez.github.io/Find-my-songz)
+🔗 [https://joelrodriguezdev.github.io/BeatFinder/](https://joelrodriguezdev.github.io/BeatFinder/)
 
 -----
 
