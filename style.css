@@ -1,324 +1,836 @@
-body {
-  font-family: 'Special Elite', cursive;
-  background: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
-  background-size: 200% 200%;
-  animation: moveBackground 20s linear infinite;
-  color: #3b2f2f;
-  margin: 0;
-  padding: 30px;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  min-height: 100vh;
+:root {
+  --bg-dark: #050505;
+  --bg-panel: rgba(20, 20, 25, 0.85);
+  --neon-cyan: #00f3ff;
+  --neon-pink: #ff0055;
+  --neon-purple: #bc13fe;
+  --text-main: #e0e0e0;
+  --font-title: 'Orbitron', sans-serif;
+  --font-body: 'Rajdhani', sans-serif;
+  --player-height: 130px; /* Altura reservada para el player */
 }
 
-@keyframes moveBackground {
-  0% {
-    background-position: 0% 0%;
-  }
-  50% {
-    background-position: 100% 100%;
-  }
-  100% {
-    background-position: 0% 0%;
-  }
+* {
+  box-sizing: border-box; /* Esto es vital para que el padding no rompa el ancho */
 }
 
-.player {
-  background: #fff8f0;
-  border: 3px solid #c8b6a6;
-  border-radius: 15px;
-  padding: 30px;
-  box-shadow: 0 0 20px rgba(100, 70, 50, 0.3);
-  width: 90%;
-  max-width: 600px;
-  text-align: center;
-}
-
-h2 {
-  font-size: 28px;
-  margin-bottom: 20px;
-  color: #5e4630;
-}
-
-input[type="text"],
-button {
-  padding: 10px;
-  font-size: 16px;
-  border: 2px solid #a38f7c;
-  border-radius: 10px;
-  background-color: #fff5ea;
-  margin: 8px;
-  color: #3b2f2f;
-}
-
-button {
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-button:hover {
-  background-color: #d9c4b0;
-}
-
-#results {
-  margin-top: 20px;
-}
-
-.song {
-  background: #fdf6ec;
-  border: 2px solid #d6bfa6;
-  border-radius: 12px;
-  padding: 15px;
-  margin-bottom: 15px;
-  text-align: left;
-  box-shadow: 2px 2px 5px rgba(90, 70, 50, 0.1);
-}
-
-.song p {
-  margin: 0 0 8px;
-  font-weight: bold;
-  color: #4c3a28;
-}
-
-audio {
+html {
+  /* Quitamos height: 100% para evitar bloqueos de scroll */
   width: 100%;
-  outline: none;
 }
 
-footer {
-  background-color: #e6d3b3;
-  color: #4d3a2a;
-  text-align: center;
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-body);
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden; /* Evita scroll lateral indeseado */
+  padding-bottom: var(--player-height); /* Espacio para que el player no tape el final */
+}
+
+/* Fondo Grid Animado */
+.bg-grid {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background-image: 
+    linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
+  background-size: 30px 30px;
+  z-index: -1;
+}
+
+.app-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
   padding: 20px;
-  font-family: 'Special Elite', cursive;
-  font-size: 14px;
-  border-top: 3px solid #c8b6a6;
+  text-align: center;
+}
+
+/* Header */
+header { margin-top: 20px; margin-bottom: 20px; }
+
+h1 {
+  font-family: var(--font-title);
+  font-size: 2.5rem;
+  margin: 0;
+  color: #fff;
+  text-shadow: 0 0 10px var(--neon-cyan);
+  line-height: 1.1;
+}
+
+/* Nuevo estilo para texto neón en el footer */
+.neon-text-light {
+  color: #fff;
+  text-shadow: 0 0 5px var(--neon-cyan), 0 0 10px var(--neon-cyan);
+  transition: text-shadow 0.3s ease-in-out;
+}
+
+.neon-text-light:hover {
+  text-shadow: 0 0 8px var(--neon-cyan), 0 0 15px var(--neon-cyan), 0 0 20px var(--neon-cyan);
+}
+
+/* Ajuste para el estado ONLINE (verde neón) */
+.status-ok {
+  color: #00ff00; /* Verde brillante */
+  text-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00;
+  animation: pulse-green 1.5s infinite alternate; /* Animación de pulsación */
+}
+
+/* Animación para el estado ONLINE */
+@keyframes pulse-green {
+  0% { text-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00; opacity: 1; }
+  100% { text-shadow: 0 0 8px #00ff00, 0 0 15px #00ff00, 0 0 20px #00ff00; opacity: 0.9; }
+}
+
+/* Asegúrate de que tu footer tenga el z-index adecuado */
+.cyber-footer {
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
-  display: none;
-  z-index: 999;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-}
-
-/* Lógica de mostrar/ocultar contenedores */
-.hidden {
-  display: none;
-}
-
-.visible {
-  display: block;
-}
-
-/* Centrado de la lupa */
-#lupaContainer {
-  display: flex;
+  background-color: var(--bg-dark); 
+  border-top: 1px solid rgba(255, 255, 255, 0.1); 
+  text-align: center; 
+  padding: 10px 20px;
+  font-size: 0.7rem;
+  color: #555; /* Color base para el texto que no tenga neón */
+  z-index: 99; /* Debajo del player (z-index: 9999) */
+  display: flex; /* 🔥 Para centrar verticalmente si hay mucho espacio */
   justify-content: center;
   align-items: center;
-  height: 150px;
+  height: 40px; /* 🔥 Altura fija para el footer */
 }
 
-.lupa-solo {
-  background: none;
-  border: none;
-  font-size: 48px;
-  cursor: pointer;
-  color: #3b2f2f;
-  transition: transform 0.2s ease;
+/* Pequeño ajuste en la altura del body para el footer fijo */
+body {
+  /* Suma la altura del player y el footer para el padding-bottom */
+  padding-bottom: calc(var(--player-height) + 40px); 
 }
 
-.lupa-solo:hover {
-  transform: scale(1.1);
+.subtitle {
+  color: var(--neon-purple);
+  font-size: 1rem;
+  letter-spacing: 2px;
+  margin-top: 5px;
 }
 
-/* Espaciado para el contenedor de búsqueda */
-#searchContainer {
+.empty-state {
+  grid-column: 1 / -1; /* Ocupa todas las columnas del grid */
+  padding: 40px 20px;
+  color: #666;
+  font-size: 1.2rem;
+  border: 1px dashed #333;
+  border-radius: 15px;
   margin-top: 20px;
+  
+  /* 🔥 FIX: Centralización usando Flexbox */
+  display: flex; 
+  flex-direction: column; 
+  justify-content: center;
+  align-items: center; 
+  /* Asegúrate de que el texto interno también se centre si es una etiqueta <p> */
+  text-align: center;
 }
 
-/* Modo nocturno */
-body.dark-mode {
-  background-color: #1e1e1e;
-  color: #f0f0f0;
+/* Buscador */
+.search-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+  padding: 0 10px;
+  width: 100%;
 }
 
-body.dark-mode .player {
-  background: #2e2e2e;
-  border-color: #555;
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
-}
-
-body.dark-mode input[type="text"],
-body.dark-mode button {
-  background-color: #333;
-  border-color: #777;
-  color: #f0f0f0;
-}
-
-body.dark-mode button:hover {
-  background-color: #555;
-}
-
-body.dark-mode .song {
-  background: #3a3a3a;
-  border-color: #666;
-  color: #f0f0f0;
-}
-
-body.dark-mode footer {
-  background-color: #222;
-  color: #ccc;
-  border-top-color: #555;
-}
-
-body.dark-mode h2,
-body.dark-mode p {
-  color: #ffffff !important;
-}
-
-/* Botón fijo de modo oscuro */
-.modo-boton {
-  position: fixed;
-  top: 15px;
-  right: 15px;
-  background-color: #fff5ea;
-  border: 2px solid #a38f7c;
-  color: #3b2f2f;
-  font-size: 24px;
-  padding: 8px 12px;
-  border-radius: 50%;
-  cursor: pointer;
-  z-index: 1000;
-  transition: all 0.3s ease;
-}
-
-body.dark-mode .modo-boton {
-  background-color: #444;
-  border-color: #888;
-  color: #f0f0f0;
-}
-
-/* RESPONSIVE PARA MOVILES Y TABLETAS */
-@media (max-width: 768px) {
-  body {
-    display: block;
-    padding: 20px;
-    min-height: auto;
-  }
-
-  body.dark-mode .player {
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
-}
-
-  .modo-boton {
-  position: fixed;
-  top: 15px;
-  right: 15px;
-  width: 48px;
-  height: 48px;
-  background-color: #fff5ea;
-  border: 2px solid #a38f7c;
-  color: #3b2f2f;
-  font-size: 22px;
-  border-radius: 50%; /* círculo perfecto */
-  cursor: pointer;
-  z-index: 1000;
+.search-box {
   display: flex;
   align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-}
-
-
-  .player {
-    margin-top: 60px;
-    width: 100%;
-    padding: 20px;
-    margin-bottom: 100px; /* espacio para separar el contenido del footer */
-  }
-
-  input[type="text"],
-  button {
-    width: 100%;
-    margin: 5px 0;
-  }
-
-  h2 {
-    font-size: 22px;
-  }
-
- footer {
-    position: fixed;
-    display: block !important;
-    margin-top: 20px;
-    padding: 15px 10px;
-    font-size: 12px;
-    line-height: 1.4;
-    text-align: center;
-    word-break: break-word;
-    white-space: normal;
-  }
-
-}
-
-.album-cover {
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid var(--neon-cyan);
+  border-radius: 30px;
+  padding: 5px 15px;
   width: 100%;
-  max-width: 100px;
-  border-radius: 10px;
+  max-width: 500px;
+}
+
+.search-icon { font-size: 1.2rem; margin-right: 10px; flex-shrink: 0; }
+
+input[type="text"] {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  width: 100%;
+  outline: none;
+  min-width: 0; 
+}
+
+#searchBtn {
+  background: var(--neon-cyan);
+  color: #000;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 20px;
+  font-family: var(--font-title);
+  font-weight: bold;
+  font-size: 0.8rem;
+  cursor: pointer;
+  white-space: nowrap;
+  margin-left: 5px;
+}
+
+/* --- GRID DE RESULTADOS (Versión Desktop por defecto) --- */
+.results-grid {
+  display: grid;
+  /* En escritorio usamos auto-fill */
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 20px;
+  padding: 10px;
+}
+
+.song-card {
+  background: var(--bg-panel);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 12px;
+  cursor: pointer;
+  transition: transform 0.2s;
+  display: flex;
+  flex-direction: column;
+  /* Asegura que la tarjeta no se desborde */
+  width: 100%; 
+  overflow: hidden;
+}
+
+.song-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--neon-purple);
+}
+
+.song-card img {
+  width: 100%;
+  aspect-ratio: 1/1;
+  border-radius: 8px;
+  object-fit: cover;
   margin-bottom: 10px;
   display: block;
 }
 
+.song-info { width: 100%; }
 
-.song {
-  opacity: 0;
-  transform: translateY(20px);
-  animation: fadeInUp 0.4s ease forwards;
+.song-info h3 {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-@keyframes fadeInUp {
-  to {
-    opacity: 1;
-    transform: translateY(0);
+.song-info p {
+  margin: 4px 0 0;
+  color: #aaa;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Overlay Play Desktop */
+.play-overlay {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.song-card:hover .play-overlay { opacity: 1; }
+.play-btn-card { font-size: 2.5rem; color: #fff; text-shadow: 0 0 10px var(--neon-cyan); }
+
+
+/* --- REPRODUCTOR FLOTANTE --- */
+.player-bar {
+  position: fixed;
+  bottom: 40px;
+  left: 0;
+  width: 100%;
+  background: rgba(10, 12, 16, 0.98);
+  border-top: 2px solid var(--neon-cyan);
+  padding: 10px 20px;
+  z-index: 9999;
+  box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.8);
+  transform: translateY(150%);
+  transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.5s ease;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.player-bar.visible { transform: translateY(0);
+  opacity: 1;
+  pointer-events: all; }
+
+.player-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.track-info { display: flex; align-items: center; width: 30%; min-width: 200px; }
+.track-info img { width: 50px; height: 50px; border-radius: 4px; margin-right: 12px; border: 1px solid var(--neon-pink); }
+.track-details { display: flex; flex-direction: column; text-align: left; overflow: hidden; }
+
+#playerTitle { color: #fff; font-weight: bold; font-size: 1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#playerArtist { color: var(--neon-cyan); font-size: 0.85rem; }
+
+.controls { flex-grow: 1; max-width: 600px; }
+audio { width: 100%; height: 35px; filter: invert(1) hue-rotate(180deg); outline: none; }
+.cyber-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 40px;
+  z-index: 10000;
+  
+  /* Estilo visual y centralización */
+  background-color: var(--bg-dark); 
+  border-top: 1px solid var(--neon-cyan); /* Línea divisoria sutil */
+  text-align: center; /* Centraliza el texto dentro del footer */
+  padding: 10px 20px;
+  
+  /* Fuente y capa */
+  font-size: 0.7rem;
+  color: #555;
+  z-index: 99; /* Asegura que esté por encima del fondo, pero debajo del reproductor (z-index: 9999) */
+}
+
+/* ==========================================================================
+   🔥 MODO RESPONSIVE (MÓVIL) - SOLUCIÓN DEFINITIVA
+   ========================================================================== */
+@media (max-width: 768px) {
+  
+  /* 1. Ajustes del Contenedor para ganar espacio */
+  .app-container {
+    padding: 15px 10px; /* Menos padding lateral */
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  h1 { font-size: 1.8rem; }
+  
+  /* 2. LA SOLUCIÓN GRID: 2 columnas forzadas (1fr 1fr) */
+  .results-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* EXACTAMENTE MITAD Y MITAD */
+    gap: 12px; /* Espacio entre tarjetas reducido */
+    padding: 0; /* Eliminamos padding extra del grid */
+  }
+
+  /* 3. Tarjetas más compactas */
+  .song-card {
+    padding: 8px; /* Padding interno más pequeño */
+    border-radius: 8px;
+    width: 100%; /* Asegura que no crezca más de su celda */
+  }
+  
+  /* Ajuste de fuentes para que no se rompan */
+  .song-info h3 { font-size: 0.8rem; margin-bottom: 2px; }
+  .song-info p { font-size: 0.7rem; }
+
+  /* Quitamos overlay en móvil */
+  .play-overlay { display: none; }
+
+  /* 4. Reproductor Móvil Optimizado */
+  .player-bar {
+    padding: 10px 15px;
+    /* Backdrop blur para estilo moderno */
+    bottom: 40px;
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    background: rgba(10, 12, 16, 0.95);
+  }
+
+  .player-content {
+    flex-direction: column; /* Uno debajo del otro */
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .track-info {
+    width: 100%;
+    min-width: 0; /* Permite que el texto se corte si es largo */
+  }
+  
+  .track-info img {
+    width: 40px; height: 40px;
+  }
+  
+  #playerTitle { font-size: 0.9rem; }
+
+  .controls {
+    width: 100%;
+    margin-top: 0;
+  }
+  
+  audio { height: 40px; }
+}
+
+/* Estilos para los iconos de enlace en las tarjetas */
+.external-links {
+  margin-top: 10px;
+  padding-top: 5px;
+  border-top: 1px dashed rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: space-around;
+}
+
+.external-links a {
+  font-size: 1.5rem;
+  text-decoration: none;
+  transition: transform 0.2s;
+  /* Asegura que los íconos sean clickeables */
+  cursor: pointer; 
+}
+
+.external-links a:hover {
+  transform: scale(1.1);
+}
+
+/* Estilos para los links en el reproductor global */
+.player-external-links {
+  margin-top: 5px;
+}
+
+.player-external-links .external-links {
+    border-top: none;
+    padding-top: 0;
+    justify-content: flex-start;
+    gap: 15px;
+}
+
+
+
+/* --- ESTILOS PARA LOS LOGOS SVG NEÓN --- */
+.external-links {
+  margin-top: 10px;
+  padding-top: 5px;
+  border-top: 1px dashed rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: space-around;
+  align-items: center; /* Centra verticalmente los iconos */
+}
+
+.external-links a {
+  text-decoration: none;
+  transition: transform 0.2s;
+  cursor: pointer; 
+  display: flex; /* Para centrar el SVG dentro del 'a' */
+  align-items: center;
+  justify-content: center;
+  width: 30px; /* Tamaño del área clickeable */
+  height: 30px;
+}
+
+.external-links a:hover {
+  transform: scale(1.2);
+}
+
+.icon {
+  width: 24px; /* Tamaño del SVG */
+  height: 24px;
+  filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.5)); /* Sombra suave por defecto */
+  transition: filter 0.3s ease-in-out;
+}
+
+/* --- ESTILOS PARA LOS LOGOS DE FUENTE NEÓN --- */
+
+/* Regla general para los iconos de Font Awesome */
+.external-links a .icon {
+  font-size: 24px; /* Tamaño base para todos */
+  filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.5)); /* Sombra suave por defecto */
+  transition: all 0.3s ease-in-out;
+}
+
+/* Colores Neón y Sombra Específica */
+.apple-music-icon {
+  color: #FF2D55; 
+  text-shadow: 0 0 5px #FF2D55; /* Usamos text-shadow, ya que es una fuente */
+}
+
+.spotify-icon {
+  color: #1DB954; 
+  text-shadow: 0 0 5px #1DB954;
+}
+
+.youtube-icon {
+  color: #FF0000; 
+  text-shadow: 0 0 5px #FF0000;
+}
+
+
+.external-links a:hover .apple-music-icon {
+  text-shadow: 0 0 8px #FF2D55, 0 0 15px #FF2D55;
+}
+
+.external-links a:hover .spotify-icon {
+  text-shadow: 0 0 8px #1DB954, 0 0 15px #1DB954;
+}
+
+.external-links a:hover .youtube-icon {
+  text-shadow: 0 0 8px #FF0000, 0 0 15px #FF0000;
+}
+
+/* Ajuste del tamaño del icono en el reproductor global */
+.player-external-links .external-links .icon {
+    font-size: 20px; 
+}
+/* Efecto de "hover" para intensificar el neón */
+.external-links a:hover .apple-music-icon {
+  filter: drop-shadow(0 0 8px #FF2D55) drop-shadow(0 0 15px #FF2D55);
+}
+
+.external-links a:hover .spotify-icon {
+  filter: drop-shadow(0 0 8px #1DB954) drop-shadow(0 0 15px #1DB954);
+}
+
+.external-links a:hover .youtube-icon {
+  filter: drop-shadow(0 0 8px #FF0000) drop-shadow(0 0 15px #FF0000);
+}
+
+
+/* Estilos para los links en el reproductor global (Ya existentes, pero se aplicará a los SVG) */
+.player-external-links {
+  margin-top: 5px;
+}
+
+.player-external-links .external-links {
+    border-top: none;
+    padding-top: 0;
+    justify-content: flex-start;
+    gap: 15px; /* Espacio entre los iconos */
+}
+
+/* Asegurarse que los iconos en el reproductor también tengan buen tamaño */
+.player-external-links .external-links .icon {
+    width: 20px; /* Un poco más pequeños en el reproductor */
+    height: 20px;
+}
+
+/* Ajuste responsive para que los iconos no sean demasiado grandes en móvil */
+@media (max-width: 768px) {
+  .external-links a {
+    width: 25px; /* Tamaño un poco más pequeño en móvil */
+    height: 25px;
+  }
+  .icon {
+    width: 20px; /* Tamaño del SVG en móvil */
+    height: 20px;
   }
 }
 
-footer {
-  font-family: 'Arial', sans-serif;
+
+/* --- ESTADOS ACTIVOS (Nuevo) --- */
+
+/* Borde y resplandor para la canción activa */
+.song-card.active-track {
+  border-color: var(--neon-pink);
+  box-shadow: 0 0 15px rgba(255, 0, 85, 0.4), inset 0 0 10px rgba(255, 0, 85, 0.2);
+  transform: translateY(-5px); /* Mantenerla elevada */
+}
+
+/* Animación suave para la imagen cuando suena */
+.song-card.active-track img {
+  animation: image-pulse 2s infinite ease-in-out;
+  filter: brightness(1.1);
+}
+
+/* El botón de play dentro de la tarjeta activa se vuelve rosa */
+.song-card.active-track .play-btn-card {
+  color: var(--neon-pink);
+  text-shadow: 0 0 10px var(--neon-pink);
+}
+
+/* Animación de pulsación opaca */
+@keyframes image-pulse {
+  0% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.85; transform: scale(1.02); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* --- AUDIO VISUALIZER --- */
+#audioVisualizer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1; /* Detrás del contenido del player */
+  opacity: 0.6; /* Sutil, para no molestar */
+  pointer-events: none; /* Click-through (que no bloquee clics) */
+  mask-image: linear-gradient(to top, black 80%, transparent 100%); /* Desvanecido arriba */
+  -webkit-mask-image: linear-gradient(to top, black 80%, transparent 100%);
+}
+
+/* Ajuste para que el player tenga fondo transparente y se vea el visualizador */
+.player-bar {
+  /* Cambiamos el color sólido por uno con transparencia ligera */
+  background: rgba(10, 12, 16, 0.85); 
+  overflow: hidden; /* Para que el canvas no se salga */
 }
 
 
-.pagination {
-  text-align: center;
-  margin-top: 10px;
+/* --- CUSTOM PLAYER CONTROLS --- */
+
+/* Ocultar el audio nativo por seguridad si se escapó algo */
+audio { display: none; }
+
+/* Contenedor de los controles nuevos */
+.custom-controls {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: rgba(0, 0, 0, 0.3); /* Fondo semi-transparente */
+    backdrop-filter: blur(5px); /* Efecto cristal borroso */
+    padding: 10px 20px;
+    border-radius: 50px; /* Bordes redondeados estilo cápsula */
+    border: 1px solid rgba(0, 243, 255, 0.2); /* Borde sutil cyan */
 }
 
-.pagination button {
-  padding: 6px 12px;
-  border-radius: 8px;
-  border: 1px solid #a38f7c;
-  background-color: #fff5ea;
-  color: #3b2f2f;
+/* Botón Play/Pause */
+.neon-btn {
+    background: transparent;
+    border: 2px solid var(--neon-cyan);
+    color: var(--neon-cyan);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 5px var(--neon-cyan);
+}
+
+.neon-btn:hover {
+    background: var(--neon-cyan);
+    color: #000;
+    box-shadow: 0 0 15px var(--neon-cyan);
+    transform: scale(1.1);
+}
+
+/* Textos de tiempo */
+#currentTimeText, #durationText {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: bold;
+    font-size: 0.8rem;
+    color: #fff;
+    min-width: 35px;
+}
+
+/* --- ESTILIZANDO LOS SLIDERS (INPUT RANGE) --- */
+/* Esto es complejo porque cada navegador requiere prefijos distintos */
+
+.progress-container {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+input[type=range] {
+    appearance: none;
+    -webkit-appearance: none; /* Quitar estilo default de Chrome/Safari */
+    width: 100%;
+    background: transparent;
+}
+
+input[type=range]:focus { outline: none; }
+
+/* LA BARRA (TRACK) */
+input[type=range]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 4px;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+    box-shadow: 0 0 2px var(--neon-purple);
+}
+
+/* EL BOTÓN QUE DESLIZAS (THUMB) */
+input[type=range]::-webkit-slider-thumb {
+    height: 12px;
+    width: 12px;
+    border-radius: 50%;
+    background: var(--neon-pink);
+    cursor: pointer;
+    -webkit-appearance: none;
+    margin-top: -4px; /* Centrar verticalmente */
+    box-shadow: 0 0 10px var(--neon-pink);
+    transition: transform 0.1s;
+}
+
+input[type=range]::-webkit-slider-thumb:hover {
+    transform: scale(1.5);
+}
+
+/* Ajuste Responsive Móvil */
+@media (max-width: 768px) {
+    .custom-controls {
+        width: 100%;
+        padding: 5px 10px;
+        border-radius: 15px;
+        flex-wrap: wrap; /* Permitir que baje si es necesario */
+        justify-content: center;
+    }
+    
+    .volume-container {
+        display: none; /* Ocultar volumen en móvil para ahorrar espacio */
+    }
+    
+    .neon-btn {
+        width: 35px; height: 35px;
+    }
+}
+
+.volume-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100px;
+}
+.volume-container i { color: var(--neon-cyan); font-size: 0.8rem; }
+
+/* --- PAGINACIÓN CYBERPUNK --- */
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  margin-top: 30px;
+  margin-bottom: 20px;
+  padding: 10px;
+}
+
+.page-btn {
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid var(--neon-cyan);
+  color: var(--neon-cyan);
+  padding: 8px 16px;
+  border-radius: 5px;
   cursor: pointer;
-  margin: 0 3px;
-  transition: background-color 0.3s;
+  font-family: var(--font-title);
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  min-width: 40px;
 }
 
-.pagination button:hover {
-  background-color: #d9c4b0;
+.page-btn:hover:not(:disabled) {
+  background: var(--neon-cyan);
+  color: #000;
+  box-shadow: 0 0 10px var(--neon-cyan);
 }
 
-body.dark-mode .pagination button {
-  background-color: #333;
-  border-color: #777;
-  color: #f0f0f0;
+.page-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  border-color: #555;
+  color: #555;
 }
 
-body.dark-mode .pagination button:hover {
-  background-color: #555;
+.page-info {
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  letter-spacing: 1px;
 }
 
+/* --- PANTALLA DE INICIO (OVERLAY) --- */
+.welcome-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000; /* Fondo negro total */
+    z-index: 20000; /* Por encima de TODO (incluso del player) */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    transition: opacity 0.8s ease-out, visibility 0.8s;
+}
 
+/* Clase para ocultarlo suavemente */
+.welcome-overlay.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.welcome-content {
+    text-align: center;
+}
+
+.terminal-text {
+    font-family: 'Courier New', monospace;
+    color: var(--neon-cyan);
+    font-size: 1rem;
+    margin: 10px 0;
+    opacity: 0;
+    animation: typeEffect 1s forwards;
+}
+
+/* Retraso para la segunda línea */
+.terminal-text:nth-child(3) {
+    animation-delay: 0.8s;
+}
+
+@keyframes typeEffect {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.cyber-btn {
+    margin-top: 30px;
+    background: transparent;
+    border: 2px solid var(--neon-pink);
+    color: var(--neon-pink);
+    padding: 15px 40px;
+    font-family: var(--font-title);
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+    cursor: pointer;
+    clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
+    transition: all 0.3s;
+    text-shadow: 0 0 5px var(--neon-pink);
+    box-shadow: 0 0 10px rgba(255, 0, 85, 0.3);
+    
+    /* Animación de aparición */
+    opacity: 0;
+    animation: fadeInBtn 0.5s forwards;
+    animation-delay: 1.5s;
+}
+
+@keyframes fadeInBtn {
+    to { opacity: 1; }
+}
+
+.cyber-btn:hover {
+    background: var(--neon-pink);
+    color: #fff;
+    box-shadow: 0 0 30px var(--neon-pink);
+}
 

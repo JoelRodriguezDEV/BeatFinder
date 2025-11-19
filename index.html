@@ -1,40 +1,96 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/3126/3126624.png" type="image/png">
   <meta charset="UTF-8">
-  <title>Find My Songz – Music Search App</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>BeatFinder</title>
+  <link rel="icon" href="icons/iconfav.png" type="image/png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" 
+  integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- Botón de modo oscuro flotante -->
-  <button id="toggleDarkMode" class="modo-boton">🌙</button>
-
-  <div class="player">
-    <h2>Find my songz</h2>
-
-    <div id="lupaContainer">
-      <button id="toggleSearch" class="lupa-solo">🔍</button>
+  <div id="welcomeScreen" class="welcome-overlay">
+    <div class="welcome-content">
+        <h1 class="neon-text">B3AT FIND3R</h1>
+        <p class="terminal-text">> SYSTEM READY...</p>
+        <p class="terminal-text">> WAITING FOR USER INPUT...</p>
+        <button id="initBtn" class="cyber-btn">INITIALIZE SYSTEM</button>
     </div>
+</div>
 
-    <div id="searchContainer" class="hidden">
-      <input type="text" id="searchInput" placeholder="Escribe un artista o canción..." />
-      <button id="searchBtn">Buscar</button>
-    </div>
+  <div class="bg-grid"></div>
 
-    <div id="results"></div>
-    <audio id="audio" controls style="margin-top: 20px;"></audio>
+  <div class="app-container">
+    <header>
+      <h1 class="neon-text">B3AT<span class="flicker"> FIND3R</span></h1>
+      <p class="subtitle">Developed by Joel Rodriguez A.K.A Da Best</p>
+    </header>
+
+    <main>
+      <div class="search-wrapper">
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="searchInput" placeholder="Buscar artista, canción o álbum..." autocomplete="off">
+          <button id="searchBtn">SCAN</button>
+        </div>
+      </div>
+
+      <div id="results" class="results-grid">
+        <div class="empty-state">
+          <p>SISTEMA EN ESPERA. INICIE BÚSQUEDA...</p>
+        </div>
+      </div>
+
+      <div id="pagination" class="pagination-container"></div>
+    </main>
   </div>
 
- <footer id="vintageFooter">
-  <p>
-    🎵 Personal project developed by <strong>Joel Rodríguez</strong><br>
-    Powered by public data from the <a href="https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/iTuneSearchAPI/index.html" target="_blank">iTunes Search API</a>.<br>
-    &copy; 2025 — All rights reserved.
-  </p>
+ <div id="globalPlayer" class="player-bar hidden">
+    <canvas id="audioVisualizer"></canvas>
+    <div class="player-content">
+    <div class="track-info">
+        <img id="playerImg" src="" alt="" class="hidden">
+        <div class="track-details">
+          <span id="playerTitle">Select a track</span>
+          <span id="playerArtist">...</span>
+        </div>
+    </div>
+
+    <div class="custom-controls">
+        <button id="playPauseBtn" class="neon-btn">
+            <i class="fas fa-play"></i>
+        </button>
+
+        <div class="progress-container">
+            <span id="currentTimeText">0:00</span>
+            <input type="range" id="progressBar" value="0" min="0" max="100" step="1">
+            <span id="durationText">0:30</span>
+        </div>
+
+        <div class="volume-container">
+            <i class="fas fa-volume-up"></i>
+            <input type="range" id="volumeBar" value="100" min="0" max="100">
+        </div>
+    </div>
+
+    <audio id="mainAudio" crossorigin="anonymous"></audio>
+    </div>
+  </div>
+
+    
+  <footer class="cyber-footer">
+    <p>
+        <span class="neon-text-light">DEV: <strong>JOEL RODRÍGUEZ</strong></span> // 
+        <span class="neon-text-light">API: <strong>ITUNES</strong></span> // 
+        <span class="status-ok">SYSTEM: ONLINE</span>
+    </p>
 </footer>
 
   <script src="script.js"></script>
