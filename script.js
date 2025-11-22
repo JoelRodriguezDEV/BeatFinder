@@ -34,24 +34,24 @@ const ALL_GENRES = [
 ];
 
 const ALL_COUNTRIES = [
-    { code: 'do', name: 'DOMINICAN REPUBLIC', flag: '🇩🇴' },
-    { code: 'us', name: 'UNITED STATES', flag: '🇺🇸' },
-    { code: 'es', name: 'SPAIN', flag: '🇪🇸' },
-    { code: 'mx', name: 'MEXICO', flag: '🇲🇽' },
-    { code: 'co', name: 'COLOMBIA', flag: '🇨🇴' },
-    { code: 'ar', name: 'ARGENTINA', flag: '🇦🇷' },
-    { code: 'pr', name: 'PUERTO RICO', flag: '🇵🇷' },
-    { code: 'cl', name: 'CHILE', flag: '🇨🇱' },
-    { code: 'pe', name: 'PERU', flag: '🇵🇪' },
-    { code: 'br', name: 'BRAZIL', flag: '🇧🇷' },
-    { code: 'gb', name: 'UNITED KINGDOM', flag: '🇬🇧' },
-    { code: 'fr', name: 'FRANCE', flag: '🇫🇷' },
-    { code: 'it', name: 'ITALY', flag: '🇮🇹' },
-    { code: 'de', name: 'GERMANY', flag: '🇩🇪' },
-    { code: 'jp', name: 'JAPAN', flag: '🇯🇵' },
-    { code: 'kr', name: 'SOUTH KOREA', flag: '🇰🇷' },
-    { code: 'au', name: 'AUSTRALIA', flag: '🇦🇺' },
-    { code: 'ca', name: 'CANADA', flag: '🇨🇦' }
+    { code: 'do', name: 'DOMINICAN REPUBLIC' },
+    { code: 'us', name: 'UNITED STATES' },
+    { code: 'es', name: 'SPAIN' },
+    { code: 'mx', name: 'MEXICO' },
+    { code: 'co', name: 'COLOMBIA' },
+    { code: 'ar', name: 'ARGENTINA' },
+    { code: 'pr', name: 'PUERTO RICO' },
+    { code: 'cl', name: 'CHILE' },
+    { code: 'pe', name: 'PERU' },
+    { code: 'br', name: 'BRAZIL' },
+    { code: 'gb', name: 'UNITED KINGDOM' },
+    { code: 'fr', name: 'FRANCE' },
+    { code: 'it', name: 'ITALY' },
+    { code: 'de', name: 'GERMANY' },
+    { code: 'jp', name: 'JAPAN' },
+    { code: 'kr', name: 'SOUTH KOREA' },
+    { code: 'au', name: 'AUSTRALIA' },
+    { code: 'ca', name: 'CANADA' }
 ];
 
 // ... (Resto de tus variables: allResults, currentPage, etc.) ...
@@ -156,11 +156,13 @@ function showResults() {
 async function initHomeView() {
     showHome();
     
-    // 1. Cargar Mini Top Global (10 canciones)
-    loadCarouselData('https://itunes.apple.com/us/rss/topsongs/limit=10/json', 'carouselGlobal');
+    const rawUrl = 'https://itunes.apple.com/us/rss/topsongs/limit=10/json';
+    const proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent(rawUrl);
+
+    loadCarouselData(proxyUrl, 'carouselGlobal');
 
     renderCollectionList(ALL_GENRES, 8, 'carouselGenres', '', 'genre');
-renderCollectionList(ALL_COUNTRIES, 8, 'carouselCountries', '', 'country');
+    renderCollectionList(ALL_COUNTRIES, 8, 'carouselCountries', '', 'country');
 }
 
 // 4.1 RENDERIZADOR GENÉRICO DE LISTAS (GÉNEROS Y PAÍSES)
@@ -211,12 +213,21 @@ function renderCollectionList(dataArray, limit, containerId, title, type) {
             clickAction = () => loadCollection('us', item.id, item.name); // Géneros siempre usan 'us' como base, o podrías usar currentCountry
 
         } else if (type === 'country') {
-            // ESTILO PAÍS
+            // ESTILO PAÍS (ACTUALIZADO: IMAGEN REAL, NO EMOJI)
+            // Usamos flagcdn.com que ofrece banderas SVG o PNG de alta calidad basadas en código ISO
+            const flagUrl = `https://flagcdn.com/w80/${item.code}.png`; 
+            
             cardContent = `
                 <div class="playlist-overlay">
-                    <span class="playlist-flag">${item.flag}</span>
+                    <img src="${flagUrl}" 
+                         alt="${item.name}" 
+                         style="width: 50px; height: auto; border-radius: 4px; box-shadow: 0 0 10px rgba(0,0,0,0.5); margin-bottom: 10px;"
+                         loading="lazy">
                     <span class="playlist-title" style="font-size:0.9rem">TOP<br>${item.name}</span>
                 </div>`;
+                
+            // NOTA: Puerto Rico (pr) y Reino Unido (gb) funcionan perfecto con códigos ISO estándar.
+            
             clickAction = () => loadCollection(item.code, '', `TOP ${item.name}`);
         }
 
@@ -936,21 +947,89 @@ const progressiveBtn = document.getElementById('progressiveBtn');
 let isProgressiveMode = false;
 
 
-function playTrackByIndex(index) {
-    // Validar límites
-    if (index < 0) index = allResults.length - 1; // Loop al final
-    if (index >= allResults.length) index = 0;    // Loop al inicio
+// 8. REPRODUCTOR GLOBAL (OPTIMIZADO: AUDIO FIRST)
+function playTrack(song, imageUrl, id) {
+    // 1. MOSTRAR BARRA INMEDIATAMENTE (Feedback visual rápido)
+    globalPlayer.classList.add('visible');
 
-    const song = allResults[index];
-    
-    // Necesitamos la imagen HD igual que en render
-    let rawUrl = song.artworkUrl100 || '';
-    let highResImage = rawUrl.replace(/\d+x\d+bb/, '600x600bb');
-    
-    // Importante: currentPlayingId debe ser el ID de esta canción
-    const id = song.id || song.trackId;
+    // 2. 🔥 OPTIMIZACIÓN CRÍTICA: PREPARAR AUDIO ANTES QUE NADA
+    // Aseguramos HTTPS para evitar redirecciones lentas
+    let secureUrl = song.previewUrl;
+    if (secureUrl && secureUrl.startsWith('http://')) {
+        secureUrl = secureUrl.replace('http://', 'https://');
+    }
 
-    playTrack(song, highResImage, id);
+    // Si es una canción nueva, cargamos y reproducimos YA.
+    if (mainAudio.src !== secureUrl) {
+        mainAudio.src = secureUrl;
+        // No esperamos a cargar todo, damos play directo
+        const playPromise = mainAudio.play();
+        
+        if (playPromise !== undefined) {
+            playPromise
+                .then(() => {
+                    // El audio inició correctamente
+                    updateVisualState(id, true);
+                })
+                .catch(error => {
+                    console.warn("Esperando interacción para reproducir...", error);
+                    updateVisualState(id, false);
+                });
+        }
+    } else {
+        // Si es la misma canción, alternamos Play/Pause
+        if (mainAudio.paused) {
+            mainAudio.play();
+            updateVisualState(id, true);
+        } else {
+            mainAudio.pause();
+            updateVisualState(id, false);
+        }
+    }
+
+    // 3. 🔥 CARGA DE LA INTERFAZ (DESPUÉS DEL AUDIO)
+    // Todo esto es "pesado", así que lo hacemos mientras el audio ya está cargando
+    
+    // A. Imagen
+    playerImg.src = imageUrl;
+    playerImg.classList.remove('hidden');
+    
+    // B. Textos y Marquees
+    setMarquee(playerTitle, song.trackName, false);
+
+    const safeArtist = song.artistName ? song.artistName.replace(/'/g, "\\'") : '';
+    const safeAlbum = song.collectionName ? song.collectionName.replace(/'/g, "\\'") : '';
+    
+    const artistHTML = `
+        <span class="clickable-link" onclick="event.stopPropagation(); toggleFullScreen(false); loadArtistData('${song.artistId}', '${safeArtist}')">
+            ${song.artistName}
+        </span>
+    `;
+    setMarquee(playerArtist, artistHTML, true);
+
+    const playerAlbum = document.getElementById('playerAlbum');
+    if (playerAlbum) {
+        if (song.collectionName && song.collectionName !== 'Single / Desconocido') {
+            playerAlbum.style.display = 'block';
+            let albumHTML = '';
+            if (song.collectionId && song.collectionId != 0 && song.collectionId !== 'null') {
+                albumHTML = `
+                    <span class="clickable-link album-link" onclick="event.stopPropagation(); toggleFullScreen(false); loadAlbumData('${song.collectionId}', '${safeAlbum}')">
+                        ${song.collectionName}
+                    </span>
+                `;
+            } else {
+                albumHTML = `<span style="cursor:default; color:#aaa;">${song.collectionName}</span>`;
+            }
+            setMarquee(playerAlbum, albumHTML, true);
+        } else {
+            playerAlbum.style.display = 'none';
+        }
+    }
+
+    // 4. Inicializar Visualizador (Si no está listo)
+    if (!isVisualizerInit) initVisualizer();
+    if (audioContext && audioContext.state === 'suspended') audioContext.resume();
 }
 
 progressiveBtn.addEventListener('click', () => {
@@ -1601,10 +1680,11 @@ function resetToHome() {
 // 16. LÓGICA DE CARGA PARA PLAYLISTS (GÉNEROS Y PAÍSES)
 // =================================================================
 
-// Esta función se activa al dar clic en las tarjetas de colores o banderas
+// EN script.js
+
 function loadCollection(country, genreId, title) {
     
-    // 1. Configurar el Título del Header
+    // 1. Configurar el Título del Header (Igual que antes)
     currentHeaderHTML = `
         <div style="width:100%; text-align:left;">
              <button class="back-btn-header" onclick="resetToHome()">
@@ -1613,18 +1693,20 @@ function loadCollection(country, genreId, title) {
             <h2 class="neon-text-light" style="margin-top:10px;">${title}</h2>
         </div>`;
 
-    // 2. Construir la URL de Apple Music dinámicamente
-    // Base: https://itunes.apple.com/{PAIS}/rss/topsongs/limit=50/genre={GENERO}/json
-    let url = `https://itunes.apple.com/${country}/rss/topsongs/limit=50`;
+    // 2. Construir la URL de Apple Music (CRUDA)
+    let rawUrl = `https://itunes.apple.com/${country}/rss/topsongs/limit=50`;
     
     if (genreId) {
-        url += `/genre=${genreId}`;
+        rawUrl += `/genre=${genreId}`;
     }
     
-    url += `/json`;
+    rawUrl += `/json`;
 
-    // 3. Ejecutar la descarga
-    fetchAndRenderList(url);
+    // 3. 🔥 LA SOLUCIÓN: Envolver en el Proxy para que GitHub no la bloquee
+    const proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent(rawUrl);
+
+    // 4. Ejecutar la descarga con la URL segura
+    fetchAndRenderList(proxyUrl);
 }
 
 // Función auxiliar para descargar, HIDRATAR y mostrar la lista
@@ -1655,9 +1737,10 @@ async function fetchAndRenderList(url) {
             .slice(0, 50) // Límite de seguridad para la API
             .join(',');
 
-        // C. Consulta de Lookup (Datos limpios)
-        // Nota: Usamos 'songs' para buscar canciones por ID
-        const lookupResponse = await fetch(`https://itunes.apple.com/lookup?id=${trackIds}&entity=song`);
+        const lookupUrl = `https://itunes.apple.com/lookup?id=${trackIds}&entity=song`;
+        const lookupProxy = 'https://corsproxy.io/?' + encodeURIComponent(lookupUrl);
+        
+        const lookupResponse = await fetch(lookupProxy);
         const lookupData = await lookupResponse.json();
 
         // Creamos un mapa para acceso rápido por ID

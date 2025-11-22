@@ -1703,6 +1703,18 @@ audio { display: none; }
     padding: 10px;
 }
 
+/* Asegurar que las banderas se vean bien dentro de la tarjeta */
+.playlist-overlay img {
+    display: block;
+    object-fit: cover; /* O contain, según prefieras */
+    transition: transform 0.3s ease;
+}
+
+.playlist-card:hover .playlist-overlay img {
+    transform: scale(1.1); /* Efecto zoom al pasar el mouse */
+    box-shadow: 0 0 15px var(--neon-cyan); /* Brillo neón en la bandera */
+}
+
 .playlist-title {
     color: #fff;
     font-weight: bold;
@@ -2036,4 +2048,30 @@ button:focus {
     justify-content: center; /* 1. Centra los botones horizontalmente dentro del div */
     width: 100%;             /* 2. Obliga al div a ocupar todo el ancho disponible */
     margin: 0 auto;          /* 3. Refuerzo para centrar el bloque en sí mismo */
+}
+
+/* --- AJUSTE DE ESPACIO EN MINI PLAYER MÓVIL --- */
+
+@media (max-width: 768px) {
+    
+    /* 1. Reducimos la caja de información del artista/canción */
+    .player-bar:not(.full-screen) .track-info {
+        width: auto;        /* Dejamos de forzar un ancho grande */
+        max-width: 45%;     /* Le ponemos un techo: nunca ocupes más del 45% de la pantalla */
+        flex-shrink: 1;     /* Permite que se encoja si falta espacio */
+        margin-right: 15px; /* 🔥 ESTO ES CLAVE: Empuja los botones hacia la derecha */
+    }
+
+    /* 2. Aseguramos que el texto se corte (truncado) antes de chocar */
+    .player-bar:not(.full-screen) .track-details {
+        max-width: 100px; /* Fuerza el corte (...) si el nombre es muy largo */
+        min-width: 0;     /* Truco Flexbox para evitar desbordes */
+    }
+
+    /* 3. (Opcional) Ajustamos la imagen un pelín más pequeña para ganar espacio */
+    .player-bar:not(.full-screen) .img-wrapper {
+        width: 40px;
+        height: 40px;
+        margin-right: 8px;
+    }
 }
