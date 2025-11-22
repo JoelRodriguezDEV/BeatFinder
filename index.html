@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>BeatFinder</title>
+  <title>Beat Finder</title>
   <link rel="icon" href="icons/iconfav.png" type="image/png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" 
   integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -30,67 +30,199 @@
   <div class="app-container">
     <header>
       <h1 class="neon-text">B3AT<span class="flicker"> FIND3R</span></h1>
-      <p class="subtitle">Developed by Joel Rodriguez A.K.A Da Best</p>
     </header>
 
     <main>
       <div class="search-wrapper">
-        <div class="search-box">
-          <span class="search-icon">🔍</span>
-          <input type="text" id="searchInput" placeholder="Buscar artista, canción o álbum..." autocomplete="off">
-          <button id="searchBtn">SCAN</button>
-        </div>
+    <div class="scanner-box">
+        <i class="fas fa-search scanner-icon"></i>
+        <input type="text" id="searchInput" placeholder="SEARCH" autocomplete="off">
+        <div class="scanner-line"></div>
+    </div>
+</div>
       </div>
 
-      <div id="results" class="results-grid">
-        <div class="empty-state">
-          <p>SISTEMA EN ESPERA. INICIE BÚSQUEDA...</p>
+      <div id="homeView" class="home-container">
+    
+    <section class="carousel-section">
+        <div class="section-header">
+            <h2 class="section-title">
+    TOP 100
+</h2>
+            <button class="view-all-btn" onclick="loadTopCharts()"><i class="fas fa-arrow-right"></i></button>
         </div>
-      </div>
+        <div class="carousel-wrapper" id="carouselGlobal"></div>
+    </section>
 
-      <div id="pagination" class="pagination-container"></div>
+    <section class="carousel-section">
+        <div class="section-header">
+            <h2 class="section-title">GENRES</h2>
+            <button class="view-all-btn" onclick="showFullMenu('genres')"> <i class="fas fa-arrow-right"></i></button>
+        </div>
+        <div class="carousel-wrapper" id="carouselGenres"></div>
+    </section>
+
+    <section class="carousel-section">
+        <div class="section-header">
+            <h2 class="section-title">COUNTRIES</h2>
+            <button class="view-all-btn" onclick="showFullMenu('countries')"> <i class="fas fa-arrow-right"></i></button>
+        </div>
+        <div class="carousel-wrapper" id="carouselCountries"></div>
+    </section>
+
+</div>
+
+<div id="resultsView" class="hidden">
+    <div id="artistHero" class="artist-hero hidden">
+        <div class="hero-backdrop" id="heroBackdrop"></div>
+
+         <button class="back-btn-floating" onclick="resetToHome()">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+
+        <div class="hero-content-artist">
+            <img id="heroAvatar" src="" alt="Artist" class="hero-avatar">
+            <div class="hero-text">
+                <h1 id="heroTitle" class="neon-text">ARTIST</h1>
+               
+            </div>
+        </div>
+    </div>
+
+    <section id="artistAlbumsSection" class="carousel-section hidden" style="padding: 0 20px; margin-bottom: 20px;">
+        <div class="section-header">
+            <h2 class="section-title" style="font-size: 1.2rem; border-left: 3px solid var(--neon-pink);">
+                <i class="fas fa-compact-disc"></i> Albums
+            </h2>
+        </div>
+        <div class="carousel-wrapper" id="artistAlbumsCarousel">
+            </div>
+    </section>
+
+    <div id="results" class="results-grid"></div>
+    <div id="pagination" class="pagination-container"></div>
+</div>
+
+      
     </main>
   </div>
 
- <div id="globalPlayer" class="player-bar hidden">
-    <canvas id="audioVisualizer"></canvas>
-    <div class="player-content">
-    <div class="track-info">
-        <img id="playerImg" src="" alt="" class="hidden">
-        <div class="track-details">
-          <span id="playerTitle">Select a track</span>
-          <span id="playerArtist">...</span>
-        </div>
-    </div>
+ <div id="globalPlayer" class="player-bar">
 
-    <div class="custom-controls">
-        <button id="playPauseBtn" class="neon-btn">
-            <i class="fas fa-play"></i>
-        </button>
-
-        <div class="progress-container">
-            <span id="currentTimeText">0:00</span>
-            <input type="range" id="progressBar" value="0" min="0" max="100" step="1">
-            <span id="durationText">0:30</span>
-        </div>
-
-        <div class="volume-container">
-            <i class="fas fa-volume-up"></i>
-            <input type="range" id="volumeBar" value="100" min="0" max="100">
-        </div>
-    </div>
-
-    <audio id="mainAudio" crossorigin="anonymous"></audio>
-    </div>
-  </div>
-
+  <button id="fsMinimizeBtn">
+        <i class="fas fa-chevron-down"></i>
+    </button>
     
-  <footer class="cyber-footer">
-    <p>
-        <span class="neon-text-light">DEV: <strong>JOEL RODRÍGUEZ</strong></span> // 
-        <span class="neon-text-light">API: <strong>ITUNES</strong></span> // 
-        <span class="status-ok">SYSTEM: ONLINE</span>
-    </p>
+    <canvas id="audioVisualizer"></canvas>
+
+    <div class="player-content">
+        
+        <div class="track-info">
+            <div class="img-wrapper"> <img id="playerImg" src="" alt="" class="hidden">
+            </div>
+            <div class="track-details">
+                <span id="playerTitle">Select a track</span>
+                <span id="playerArtist">...</span>
+                <span id="playerAlbum"></span>
+            </div>
+        </div>
+
+        <div class="custom-controls">
+            
+            <div class="corner-fold-btn" id="togglePlayerBtn">
+                <i class="fas fa-expand-alt"></i>
+            </div>
+
+            <div class="controls-row main-controls">
+                <button id="prevTrackBtn" class="neon-btn small-control"><i class="fas fa-step-backward"></i></button>
+                <button id="playPauseBtn" class="neon-btn play-large"><i class="fas fa-play"></i></button>
+                <button id="nextTrackBtn" class="neon-btn small-control"><i class="fas fa-step-forward"></i></button>
+              </div>
+
+            <div class="controls-row progress-row">
+                <span id="currentTimeText">0:00</span>
+                <input type="range" id="progressBar" value="0" min="0" max="100" step="1">
+                <span id="durationText">0:30</span>
+            </div>
+
+           <div class="controls-row bottom-extras">
+    <div class="volume-container" id="volumeContainer">
+        <button id="toggleVolumeBtn" class="ghost-btn vol-btn">
+            <i class="fas fa-volume-up"></i>
+        </button>
+        <input type="range" id="volumeBar" value="100" min="0" max="100">
+    </div>
+
+   <button id="progressiveBtn" class="ghost-btn vol-btn" title="Repetir Canción (Loop)">
+        <i class="fas fa-repeat"></i>
+    </button>
+</div>
+        </div> <audio id="mainAudio" crossorigin="anonymous"></audio>
+    </div>
+</div>
+    
+  <footer class="cyber-footer-pro">
+    <div class="footer-container">
+        
+        <div class="footer-col">
+            <h4 class="footer-logo neon-text">B3AT<span class="flicker"> FIND3R</span></h4>
+            <p class="dev-credit">
+                Developed by 
+                <a href="https://www.linkedin.com/in/joel-rodriguez-414202285/" 
+                   target="_blank" 
+                   rel="noopener noreferrer" 
+                   class="dev-link">Joel Rodríguez</a>
+            </p>
+            <div class="system-status">
+                <span class="status-dot"></span> SYSTEM: ONLINE
+            </div>
+        </div>
+
+        <div class="footer-col wide-col">
+            <h5 class="footer-heading">LEGAL & COPYRIGHT</h5>
+            <p class="legal-text">
+                This project is for <strong>educational and non-commercial purposes only</strong>. 
+                BeatFinder is not affiliated with Apple Inc. 
+            </p>
+            <p class="legal-text">
+                Music metadata, artwork, and audio previews are provided courtesy of the 
+                <strong>iTunes Search API</strong>. All trademarks, logos, and copyrights 
+                related to artists, albums, and tracks are property of their respective owners.
+            </p>
+        </div>
+
+        <div class="footer-col">
+            <h5 class="footer-heading">CONNECT</h5>
+            <div class="footer-socials">
+                
+                <a href="https://github.com/JoelRodriguezDEV" 
+                   target="_blank" 
+                   rel="noopener noreferrer" 
+                   title="GitHub">
+                   <i class="fab fa-github"></i>
+                </a>
+                
+                <a href="https://www.linkedin.com/in/joel-rodriguez-414202285/" 
+                   target="_blank" 
+                   rel="noopener noreferrer" 
+                   title="LinkedIn">
+                   <i class="fab fa-linkedin"></i>
+                </a>
+                
+                <a href="https://github.com/JoelRodriguezDEV" 
+                   target="_blank" 
+                   rel="noopener noreferrer" 
+                   title="My Projects">
+                   <i class="fas fa-globe"></i>
+                </a>
+
+            </div>
+            <p class="copyright-text">
+                &copy; <span id="yearSpan">2025</span> Joel Rodríguez.<br>All rights reserved.
+            </p>
+        </div>
+
+    </div>
 </footer>
 
   <script src="script.js"></script>

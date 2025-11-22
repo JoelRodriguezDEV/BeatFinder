@@ -7,15 +7,20 @@
   --text-main: #e0e0e0;
   --font-title: 'Orbitron', sans-serif;
   --font-body: 'Rajdhani', sans-serif;
-  --player-height: 130px; /* Altura reservada para el player */
+  --player-height: 130px;
 }
 
 * {
-  box-sizing: border-box; /* Esto es vital para que el padding no rompa el ancho */
+  box-sizing: border-box;
+  /* 🔥 ESTO ELIMINA EL DESTELLO CUADRADO AZUL EN MÓVILES */
+  -webkit-tap-highlight-color: transparent;
+  focus-visible {
+    outline: 2px solid var(--neon-cyan); /* Borde neón solo cuando se usa teclado */
+    outline-offset: 2px;
+}
 }
 
 html {
-  /* Quitamos height: 100% para evitar bloqueos de scroll */
   width: 100%;
 }
 
@@ -25,10 +30,13 @@ body {
   font-family: var(--font-body);
   background-color: var(--bg-dark);
   color: var(--text-main);
-  min-height: 100vh;
+  /* 🔥 ESTO ES LO NUEVO PARA EL FOOTER FIJO: */
+  min-height: 100vh;       /* 1. Altura mínima del 100% de la ventana */
+  display: flex;           /* 2. Convertimos el body en caja flexible */
+  flex-direction: column;  /* 3. Organizamos los elementos en columna vertical */
   width: 100%;
-  overflow-x: hidden; /* Evita scroll lateral indeseado */
-  padding-bottom: var(--player-height); /* Espacio para que el player no tape el final */
+  overflow-x: hidden;
+  padding-bottom: 0; 
 }
 
 /* Fondo Grid Animado */
@@ -48,6 +56,9 @@ body {
   margin: 0 auto;
   padding: 20px;
   text-align: center;
+  flex: 1;  /* Esto hace que este div ocupe todo el espacio sobrante */
+  display: flex;           /* Opcional: ayuda a centrar contenidos internos */
+  flex-direction: column;  /* Opcional: mantiene orden vertical */
 }
 
 /* Header */
@@ -60,9 +71,14 @@ h1 {
   color: #fff;
   text-shadow: 0 0 10px var(--neon-cyan);
   line-height: 1.1;
+  cursor: pointer;
+  transition: transform 0.2s ease;
 }
 
-/* Nuevo estilo para texto neón en el footer */
+h1:hover { transform: scale(1.02); }
+h1:active { transform: scale(0.98); }
+
+/* Footer y Neón */
 .neon-text-light {
   color: #fff;
   text-shadow: 0 0 5px var(--neon-cyan), 0 0 10px var(--neon-cyan);
@@ -73,42 +89,157 @@ h1 {
   text-shadow: 0 0 8px var(--neon-cyan), 0 0 15px var(--neon-cyan), 0 0 20px var(--neon-cyan);
 }
 
-/* Ajuste para el estado ONLINE (verde neón) */
 .status-ok {
-  color: #00ff00; /* Verde brillante */
+  color: #00ff00;
   text-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00;
-  animation: pulse-green 1.5s infinite alternate; /* Animación de pulsación */
+  animation: pulse-green 1.5s infinite alternate;
 }
 
-/* Animación para el estado ONLINE */
 @keyframes pulse-green {
   0% { text-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00; opacity: 1; }
   100% { text-shadow: 0 0 8px #00ff00, 0 0 15px #00ff00, 0 0 20px #00ff00; opacity: 0.9; }
 }
 
-/* Asegúrate de que tu footer tenga el z-index adecuado */
-.cyber-footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background-color: var(--bg-dark); 
-  border-top: 1px solid rgba(255, 255, 255, 0.1); 
-  text-align: center; 
-  padding: 10px 20px;
-  font-size: 0.7rem;
-  color: #555; /* Color base para el texto que no tenga neón */
-  z-index: 99; /* Debajo del player (z-index: 9999) */
-  display: flex; /* 🔥 Para centrar verticalmente si hay mucho espacio */
-  justify-content: center;
-  align-items: center;
-  height: 40px; /* 🔥 Altura fija para el footer */
+/* =========================================
+   FOOTER PROFESIONAL CYBERPUNK
+   ========================================= */
+
+.cyber-footer-pro {
+    background: #08080a; /* Fondo un poco más oscuro que el body */
+    border-top: 1px solid rgba(0, 243, 255, 0.1);
+    padding: 40px 20px 100px 20px; /* Padding inferior extra para el player */
+    margin-top: auto;
+    position: relative;
+    z-index: 10;
+    font-family: var(--font-body);
 }
 
-/* Pequeño ajuste en la altura del body para el footer fijo */
-body {
-  /* Suma la altura del player y el footer para el padding-bottom */
-  padding-bottom: calc(var(--player-height) + 40px); 
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.footer-col {
+    flex: 1;
+    min-width: 250px;
+}
+
+.wide-col {
+    flex: 2; /* Esta columna ocupa más espacio para el texto legal */
+    min-width: 300px;
+}
+
+/* Tipografía y Estilos */
+.footer-logo {
+    font-family: var(--font-title);
+    font-size: 1.5rem;
+    margin: 0 0 10px 0;
+    letter-spacing: 2px;
+}
+
+.footer-heading {
+    color: var(--neon-cyan);
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    border-left: 3px solid var(--neon-pink);
+    padding-left: 10px;
+}
+
+.dev-credit {
+    color: #aaa;
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+}
+
+.dev-link {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+.dev-link:hover { color: var(--neon-cyan); text-shadow: 0 0 5px var(--neon-cyan); }
+
+/* Texto Legal (Pequeño y discreto) */
+.legal-text {
+    color: #666;
+    font-size: 0.75rem;
+    line-height: 1.6;
+    margin-bottom: 10px;
+    text-align: justify;
+}
+
+.legal-text strong { color: #999; }
+
+/* Status System */
+.system-status {
+    display: inline-flex;
+    align-items: center;
+    background: rgba(0, 255, 0, 0.1);
+    border: 1px solid rgba(0, 255, 0, 0.3);
+    padding: 5px 12px;
+    border-radius: 20px;
+    color: #00ff00;
+    font-size: 0.75rem;
+    font-family: var(--font-title);
+    letter-spacing: 1px;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #00ff00;
+    border-radius: 50%;
+    margin-right: 8px;
+    box-shadow: 0 0 8px #00ff00;
+    animation: pulse-green 1.5s infinite;
+}
+
+/* Redes Sociales */
+.footer-socials {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.footer-socials a {
+    color: #aaa;
+    font-size: 1.4rem;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid transparent;
+}
+
+.footer-socials a:hover {
+    background: var(--neon-cyan);
+    color: #000;
+    box-shadow: 0 0 15px var(--neon-cyan);
+    transform: translateY(-3px);
+}
+
+.copyright-text {
+    color: #555;
+    font-size: 0.7rem;
+    line-height: 1.4;
+}
+
+/* Ajuste Móvil */
+@media (max-width: 768px) {
+    .footer-container { flex-direction: column; text-align: center; }
+    .footer-heading { border-left: none; border-bottom: 2px solid var(--neon-pink); padding-bottom: 5px; display: inline-block; }
+    .legal-text { text-align: center; }
+    .footer-socials { justify-content: center; }
 }
 
 .subtitle {
@@ -119,44 +250,144 @@ body {
 }
 
 .empty-state {
-  grid-column: 1 / -1; /* Ocupa todas las columnas del grid */
+  grid-column: 1 / -1;
   padding: 40px 20px;
   color: #666;
   font-size: 1.2rem;
   border: 1px dashed #333;
   border-radius: 15px;
   margin-top: 20px;
-  
-  /* 🔥 FIX: Centralización usando Flexbox */
   display: flex; 
   flex-direction: column; 
   justify-content: center;
   align-items: center; 
-  /* Asegúrate de que el texto interno también se centre si es una etiqueta <p> */
   text-align: center;
 }
 
-/* Buscador */
 .search-wrapper {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 30px;
-  padding: 0 10px;
-  width: 100%;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 30px;
+    position: relative;
+    z-index: 5;
+}
+
+.scanner-box {
+    position: relative;
+    width: 100%;
+    max-width: 500px; /* Un poco más ancho para comodidad */
+    background: rgba(0, 0, 0, 0.7);
+    border: 1px solid var(--neon-cyan);
+    border-radius: 8px; /* Bordes más técnicos, menos redondos */
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+    box-shadow: 0 0 15px rgba(0, 243, 255, 0.1);
+    overflow: hidden; /* Para contener la luz del escáner */
+    transition: all 0.3s ease;
+}
+
+.scanner-box:focus-within {
+    box-shadow: 0 0 25px rgba(0, 243, 255, 0.3);
+    border-color: #fff;
+    background: rgba(0, 0, 0, 0.9);
+}
+
+.scanner-icon {
+    color: var(--neon-cyan);
+    font-size: 1.1rem;
+    margin-right: 15px;
+    opacity: 0.8;
+}
+
+.scanner-box input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #fff;
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    padding: 15px 0;
+    letter-spacing: 1px;
+}
+
+/* --- ANIMACIÓN DE ESCÁNER (Luz que pasa) --- */
+.scanner-line {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 243, 255, 0.1), transparent);
+    transform: skewX(-20deg);
+    pointer-events: none;
+    animation: scan-light 3s infinite linear;
+}
+
+@keyframes scan-light {
+    0% { left: -100%; }
+    50% { left: 200%; } /* Pasa rápido */
+    100% { left: 200%; } /* Espera un poco antes de volver */
 }
 
 .search-box {
-  display: flex;
-  align-items: center;
-  background: rgba(0, 0, 0, 0.6);
-  border: 1px solid var(--neon-cyan);
-  border-radius: 30px;
-  padding: 5px 15px;
-  width: 100%;
-  max-width: 500px;
+    display: flex;
+    align-items: center;
+    
+    /* Estilo Fijo (sin animación de ancho) */
+    width: 100%;
+    max-width: 400px; /* Un ancho elegante, ni muy chico ni muy grande */
+    
+    background: rgba(0, 0, 0, 0.6); /* Fondo oscuro semitransparente */
+    border: 1px solid var(--neon-cyan); /* Borde neón siempre activo */
+    border-radius: 50px; /* Bordes redondos */
+    padding: 5px 5px 5px 20px; /* Espacio para el texto a la izquierda */
+    
+    box-shadow: 0 0 15px rgba(0, 243, 255, 0.1); /* Brillo suave constante */
+    transition: box-shadow 0.3s ease;
 }
 
-.search-icon { font-size: 1.2rem; margin-right: 10px; flex-shrink: 0; }
+.search-box:hover,
+.search-box:focus-within {
+    box-shadow: 0 0 25px rgba(0, 243, 255, 0.3);
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.search-box.active {
+    background: rgba(0, 0, 0, 0.8);
+    border-color: var(--neon-cyan);
+    box-shadow: 0 0 20px rgba(0, 243, 255, 0.15);
+    padding-left: 20px; /* Añadimos aire a la izquierda al abrir */
+}
+
+/* El Input (Oculto por defecto) */
+.search-box input {
+    width: 100%;      /* Ocupa todo el espacio disponible */
+    opacity: 1;       /* Siempre visible */
+    border: none;
+    background: transparent;
+    outline: none;
+    color: #fff;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    padding: 5px 0;
+}
+
+.search-box.active input {
+    width: 280px;       /* 🔓 ABIERTO: Crece y EMPUJA el botón */
+    opacity: 1;
+    padding-right: 10px; /* Espacio entre texto y lupa */
+}
+
+.search-icon {
+  color: var(--neon-cyan);
+  font-size: 1.2rem;
+  margin-right: 15px;
+  text-shadow: 0 0 10px var(--neon-cyan);
+  flex-shrink: 0;
+}
 
 input[type="text"] {
   background: transparent;
@@ -170,23 +401,37 @@ input[type="text"] {
 }
 
 #searchBtn {
-  background: var(--neon-cyan);
-  color: #000;
-  border: none;
-  padding: 8px 15px;
-  border-radius: 20px;
-  font-family: var(--font-title);
-  font-weight: bold;
-  font-size: 0.8rem;
-  cursor: pointer;
-  white-space: nowrap;
-  margin-left: 5px;
+    background: transparent;
+    border: none;
+    color: var(--neon-cyan);
+    font-size: 1.2rem;
+    cursor: pointer;
+    
+    /* Dimensiones y centrado */
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: transform 0.2s ease;
 }
 
-/* --- GRID DE RESULTADOS (Versión Desktop por defecto) --- */
+#searchBtn i {
+    /* Aseguramos que el icono no tenga márgenes propios */
+    margin: 0;
+    padding: 0;
+    display: block; /* A veces inline-block agrega espacio abajo */
+}
+
+#searchBtn:hover {
+    transform: scale(1.1);
+    text-shadow: 0 0 10px var(--neon-cyan);
+}
+
+/* --- GRID DE RESULTADOS --- */
 .results-grid {
   display: grid;
-  /* En escritorio usamos auto-fill */
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   gap: 20px;
   padding: 10px;
@@ -194,21 +439,25 @@ input[type="text"] {
 
 .song-card {
   background: var(--bg-panel);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 12px;
   padding: 12px;
   cursor: pointer;
-  transition: transform 0.2s;
   display: flex;
   flex-direction: column;
-  /* Asegura que la tarjeta no se desborde */
   width: 100%; 
   overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); 
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  position: relative;
 }
 
 .song-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-8px) scale(1.02); 
   border-color: var(--neon-purple);
+  box-shadow: 
+    0 15px 30px rgba(0, 0, 0, 0.8),
+    0 0 20px rgba(188, 19, 254, 0.2);
 }
 
 .song-card img {
@@ -231,16 +480,7 @@ input[type="text"] {
   text-overflow: ellipsis;
 }
 
-.song-info p {
-  margin: 4px 0 0;
-  color: #aaa;
-  font-size: 0.85rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* Overlay Play Desktop */
+/* Play Overlay en Cards */
 .play-overlay {
   position: absolute;
   top: 0; left: 0; width: 100%; height: 100%;
@@ -252,315 +492,32 @@ input[type="text"] {
   transition: opacity 0.2s;
 }
 .song-card:hover .play-overlay { opacity: 1; }
-.play-btn-card { font-size: 2.5rem; color: #fff; text-shadow: 0 0 10px var(--neon-cyan); }
 
 
-/* --- REPRODUCTOR FLOTANTE --- */
-.player-bar {
-  position: fixed;
-  bottom: 40px;
-  left: 0;
-  width: 100%;
-  background: rgba(10, 12, 16, 0.98);
-  border-top: 2px solid var(--neon-cyan);
-  padding: 10px 20px;
-  z-index: 9999;
-  box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.8);
-  transform: translateY(150%);
-  transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.5s ease;
-  opacity: 0;
-  pointer-events: none;
-}
-
-.player-bar.visible { transform: translateY(0);
-  opacity: 1;
-  pointer-events: all; }
-
-.player-content {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-}
-
-.track-info { display: flex; align-items: center; width: 30%; min-width: 200px; }
-.track-info img { width: 50px; height: 50px; border-radius: 4px; margin-right: 12px; border: 1px solid var(--neon-pink); }
-.track-details { display: flex; flex-direction: column; text-align: left; overflow: hidden; }
-
-#playerTitle { color: #fff; font-weight: bold; font-size: 1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-#playerArtist { color: var(--neon-cyan); font-size: 0.85rem; }
-
-.controls { flex-grow: 1; max-width: 600px; }
-audio { width: 100%; height: 35px; filter: invert(1) hue-rotate(180deg); outline: none; }
-.cyber-footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 40px;
-  z-index: 10000;
-  
-  /* Estilo visual y centralización */
-  background-color: var(--bg-dark); 
-  border-top: 1px solid var(--neon-cyan); /* Línea divisoria sutil */
-  text-align: center; /* Centraliza el texto dentro del footer */
-  padding: 10px 20px;
-  
-  /* Fuente y capa */
-  font-size: 0.7rem;
-  color: #555;
-  z-index: 99; /* Asegura que esté por encima del fondo, pero debajo del reproductor (z-index: 9999) */
-}
-
-/* ==========================================================================
-   🔥 MODO RESPONSIVE (MÓVIL) - SOLUCIÓN DEFINITIVA
-   ========================================================================== */
-@media (max-width: 768px) {
-  
-  /* 1. Ajustes del Contenedor para ganar espacio */
-  .app-container {
-    padding: 15px 10px; /* Menos padding lateral */
-    width: 100%;
-    overflow-x: hidden;
+.play-btn-card { font-size: 2.5rem;
+color: #fff; 
+text-shadow: 0 0 10px var(--neon-cyan);
+text-shadow: 0 0 10px var(--neon-cyan), 0 0 20px var(--neon-cyan);
+transition: transform 0.2s ease;
   }
 
-  h1 { font-size: 1.8rem; }
-  
-  /* 2. LA SOLUCIÓN GRID: 2 columnas forzadas (1fr 1fr) */
-  .results-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr; /* EXACTAMENTE MITAD Y MITAD */
-    gap: 12px; /* Espacio entre tarjetas reducido */
-    padding: 0; /* Eliminamos padding extra del grid */
-  }
-
-  /* 3. Tarjetas más compactas */
-  .song-card {
-    padding: 8px; /* Padding interno más pequeño */
-    border-radius: 8px;
-    width: 100%; /* Asegura que no crezca más de su celda */
-  }
-  
-  /* Ajuste de fuentes para que no se rompan */
-  .song-info h3 { font-size: 0.8rem; margin-bottom: 2px; }
-  .song-info p { font-size: 0.7rem; }
-
-  /* Quitamos overlay en móvil */
-  .play-overlay { display: none; }
-
-  /* 4. Reproductor Móvil Optimizado */
-  .player-bar {
-    padding: 10px 15px;
-    /* Backdrop blur para estilo moderno */
-    bottom: 40px;
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    background: rgba(10, 12, 16, 0.95);
-  }
-
-  .player-content {
-    flex-direction: column; /* Uno debajo del otro */
-    align-items: flex-start;
-    gap: 8px;
-  }
-
-  .track-info {
-    width: 100%;
-    min-width: 0; /* Permite que el texto se corte si es largo */
-  }
-  
-  .track-info img {
-    width: 40px; height: 40px;
-  }
-  
-  #playerTitle { font-size: 0.9rem; }
-
-  .controls {
-    width: 100%;
-    margin-top: 0;
-  }
-  
-  audio { height: 40px; }
-}
-
-/* Estilos para los iconos de enlace en las tarjetas */
-.external-links {
-  margin-top: 10px;
-  padding-top: 5px;
-  border-top: 1px dashed rgba(255, 255, 255, 0.1);
-  display: flex;
-  justify-content: space-around;
-}
-
-.external-links a {
-  font-size: 1.5rem;
-  text-decoration: none;
-  transition: transform 0.2s;
-  /* Asegura que los íconos sean clickeables */
-  cursor: pointer; 
-}
-
-.external-links a:hover {
-  transform: scale(1.1);
-}
-
-/* Estilos para los links en el reproductor global */
-.player-external-links {
-  margin-top: 5px;
-}
-
-.player-external-links .external-links {
-    border-top: none;
-    padding-top: 0;
-    justify-content: flex-start;
-    gap: 15px;
-}
-
-
-
-/* --- ESTILOS PARA LOS LOGOS SVG NEÓN --- */
-.external-links {
-  margin-top: 10px;
-  padding-top: 5px;
-  border-top: 1px dashed rgba(255, 255, 255, 0.1);
-  display: flex;
-  justify-content: space-around;
-  align-items: center; /* Centra verticalmente los iconos */
-}
-
-.external-links a {
-  text-decoration: none;
-  transition: transform 0.2s;
-  cursor: pointer; 
-  display: flex; /* Para centrar el SVG dentro del 'a' */
-  align-items: center;
-  justify-content: center;
-  width: 30px; /* Tamaño del área clickeable */
-  height: 30px;
-}
-
-.external-links a:hover {
-  transform: scale(1.2);
-}
-
-.icon {
-  width: 24px; /* Tamaño del SVG */
-  height: 24px;
-  filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.5)); /* Sombra suave por defecto */
-  transition: filter 0.3s ease-in-out;
-}
-
-/* --- ESTILOS PARA LOS LOGOS DE FUENTE NEÓN --- */
-
-/* Regla general para los iconos de Font Awesome */
-.external-links a .icon {
-  font-size: 24px; /* Tamaño base para todos */
-  filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.5)); /* Sombra suave por defecto */
-  transition: all 0.3s ease-in-out;
-}
-
-/* Colores Neón y Sombra Específica */
-.apple-music-icon {
-  color: #FF2D55; 
-  text-shadow: 0 0 5px #FF2D55; /* Usamos text-shadow, ya que es una fuente */
-}
-
-.spotify-icon {
-  color: #1DB954; 
-  text-shadow: 0 0 5px #1DB954;
-}
-
-.youtube-icon {
-  color: #FF0000; 
-  text-shadow: 0 0 5px #FF0000;
-}
-
-
-.external-links a:hover .apple-music-icon {
-  text-shadow: 0 0 8px #FF2D55, 0 0 15px #FF2D55;
-}
-
-.external-links a:hover .spotify-icon {
-  text-shadow: 0 0 8px #1DB954, 0 0 15px #1DB954;
-}
-
-.external-links a:hover .youtube-icon {
-  text-shadow: 0 0 8px #FF0000, 0 0 15px #FF0000;
-}
-
-/* Ajuste del tamaño del icono en el reproductor global */
-.player-external-links .external-links .icon {
-    font-size: 20px; 
-}
-/* Efecto de "hover" para intensificar el neón */
-.external-links a:hover .apple-music-icon {
-  filter: drop-shadow(0 0 8px #FF2D55) drop-shadow(0 0 15px #FF2D55);
-}
-
-.external-links a:hover .spotify-icon {
-  filter: drop-shadow(0 0 8px #1DB954) drop-shadow(0 0 15px #1DB954);
-}
-
-.external-links a:hover .youtube-icon {
-  filter: drop-shadow(0 0 8px #FF0000) drop-shadow(0 0 15px #FF0000);
-}
-
-
-/* Estilos para los links en el reproductor global (Ya existentes, pero se aplicará a los SVG) */
-.player-external-links {
-  margin-top: 5px;
-}
-
-.player-external-links .external-links {
-    border-top: none;
-    padding-top: 0;
-    justify-content: flex-start;
-    gap: 15px; /* Espacio entre los iconos */
-}
-
-/* Asegurarse que los iconos en el reproductor también tengan buen tamaño */
-.player-external-links .external-links .icon {
-    width: 20px; /* Un poco más pequeños en el reproductor */
-    height: 20px;
-}
-
-/* Ajuste responsive para que los iconos no sean demasiado grandes en móvil */
-@media (max-width: 768px) {
-  .external-links a {
-    width: 25px; /* Tamaño un poco más pequeño en móvil */
-    height: 25px;
-  }
-  .icon {
-    width: 20px; /* Tamaño del SVG en móvil */
-    height: 20px;
-  }
-}
-
-
-/* --- ESTADOS ACTIVOS (Nuevo) --- */
-
-/* Borde y resplandor para la canción activa */
+/* --- ESTADO ACTIVO DE LA CARTA --- */
 .song-card.active-track {
   border-color: var(--neon-pink);
   box-shadow: 0 0 15px rgba(255, 0, 85, 0.4), inset 0 0 10px rgba(255, 0, 85, 0.2);
-  transform: translateY(-5px); /* Mantenerla elevada */
+  transform: translateY(-5px);
 }
 
-/* Animación suave para la imagen cuando suena */
 .song-card.active-track img {
   animation: image-pulse 2s infinite ease-in-out;
   filter: brightness(1.1);
 }
 
-/* El botón de play dentro de la tarjeta activa se vuelve rosa */
 .song-card.active-track .play-btn-card {
   color: var(--neon-pink);
   text-shadow: 0 0 10px var(--neon-pink);
 }
 
-/* Animación de pulsación opaca */
 @keyframes image-pulse {
   0% { opacity: 1; transform: scale(1); }
   50% { opacity: 0.85; transform: scale(1.02); }
@@ -574,40 +531,477 @@ audio { width: 100%; height: 35px; filter: invert(1) hue-rotate(180deg); outline
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: -1; /* Detrás del contenido del player */
-  opacity: 0.6; /* Sutil, para no molestar */
-  pointer-events: none; /* Click-through (que no bloquee clics) */
-  mask-image: linear-gradient(to top, black 80%, transparent 100%); /* Desvanecido arriba */
+  z-index: -1;
+  opacity: 0.6;
+  pointer-events: none;
+  mask-image: linear-gradient(to top, black 80%, transparent 100%);
   -webkit-mask-image: linear-gradient(to top, black 80%, transparent 100%);
 }
 
-/* Ajuste para que el player tenga fondo transparente y se vea el visualizador */
-.player-bar {
-  /* Cambiamos el color sólido por uno con transparencia ligera */
-  background: rgba(10, 12, 16, 0.85); 
-  overflow: hidden; /* Para que el canvas no se salga */
+/* ==========================================================================
+   MÓVIL - RESULTADOS GRID
+   ========================================================================== */
+@media (max-width: 768px) {
+  .app-container { padding: 15px 10px; width: 100%; overflow-x: hidden; }
+  h1 { font-size: 1.8rem; }
+
+  .results-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 0;
+  }
+
+  .song-card { padding: 8px; border-radius: 8px; width: 100%; }
+  .song-info h3 { font-size: 0.8rem; margin-bottom: 2px; }
+  .song-info p { font-size: 0.7rem; }
+  .play-overlay { display: none; }
 }
 
+/* --- ICONOS NEÓN EXTERNOS --- */
+.external-links {
+  margin-top: 10px;
+  padding-top: 5px;
+  border-top: 1px dashed rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
 
-/* --- CUSTOM PLAYER CONTROLS --- */
+.external-links a {
+  text-decoration: none;
+  transition: transform 0.2s;
+  cursor: pointer; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px; 
+  height: 30px;
+}
 
-/* Ocultar el audio nativo por seguridad si se escapó algo */
-audio { display: none; }
+.external-links a:hover { transform: scale(1.2); }
+.external-links a .icon {
+  font-size: 22px; 
+  opacity: 0.9;    
+  transition: all 0.3s ease-in-out;
+  filter: none; 
+}
 
-/* Contenedor de los controles nuevos */
-.custom-controls {
-    flex-grow: 1;
+.apple-music-icon { color: #FF2D55; text-shadow: 0 0 2px rgba(255, 45, 85, 0.6), 0 0 3px rgba(255, 45, 85, 0.4); }
+.spotify-icon { color: #1DB954; text-shadow: 0 0 2px rgba(29, 185, 84, 0.6), 0 0 3px rgba(29, 185, 84, 0.4); }
+.youtube-icon { color: #FF0000; text-shadow: 0 0 2px rgba(255, 0, 0, 0.6), 0 0 3px rgba(255, 0, 0, 0.4); }
+
+.external-links a:hover .apple-music-icon { text-shadow: 0 0 3px #FF2D55, 0 0 4px #FF2D55, 0 0 5px #FF2D55; }
+.external-links a:hover .spotify-icon { text-shadow: 0 0 3px #1DB954, 0 0 4px #1DB954, 0 0 5px #1DB954; }
+.external-links a:hover .youtube-icon { text-shadow: 0 0 3px #FF0000, 0 0 4px #FF0000, 0 0 5px #FF0000; }
+
+/* ==========================================================================
+    REPRODUCTOR BARRA (DOCKED - CORREGIDO)
+   ========================================================================== */
+.player-bar {
+    position: fixed;
+    bottom: 0; /* ANCLADO AL SUELO */
+    left: 0;
+    width: 100%;
+    height: 90px;
+    
+    /* Efecto Cristal Ahumado (Glassmorphism) */
+    background: rgba(5, 5, 8, 0.95); 
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    
+    border-top: 1px solid rgba(0, 243, 255, 0.2); /* Línea neón sutil arriba */
+    box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.8); /* Sombra hacia arriba para separar */
+    
+    padding: 0 20px;
+    z-index: 9999;
+    
+    /* Transición suave al abrir/cerrar */
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), height 0.4s ease;
+    
     display: flex;
     align-items: center;
-    gap: 15px;
-    background: rgba(0, 0, 0, 0.3); /* Fondo semi-transparente */
-    backdrop-filter: blur(5px); /* Efecto cristal borroso */
-    padding: 10px 20px;
-    border-radius: 50px; /* Bordes redondeados estilo cápsula */
-    border: 1px solid rgba(0, 243, 255, 0.2); /* Borde sutil cyan */
+    
+    /* IMPORTANTE: Oculto por defecto (transform) */
+    transform: translateY(100%); 
 }
 
-/* Botón Play/Pause */
+/* Cuando tiene la clase .visible (JS lo activa al dar play) */
+.player-bar.visible {
+    transform: translateY(0);
+}
+
+.player-content {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+    position: relative; /* Para posicionamiento absoluto si fuera necesario */
+}
+
+/* Info del Track (Mini) */
+.track-info { 
+    display: flex; 
+    align-items: center; 
+    width: 30%; 
+    min-width: 180px;
+    overflow: hidden; /* Evitar desbordes */
+}
+
+/* Wrapper de imagen para controlar tamaño exacto */
+.img-wrapper {
+    width: 50px; 
+    height: 50px;
+    margin-right: 12px;
+    flex-shrink: 0; /* Que no se aplaste */
+}
+
+.track-info img { 
+    width: 100%; 
+    height: 100%; 
+    border-radius: 4px; 
+    border: 1px solid var(--neon-pink); 
+    object-fit: cover;
+}
+
+.track-details { display: flex; flex-direction: column; text-align: left; overflow: hidden; }
+#playerTitle { color: #fff; font-weight: bold; font-size: 1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#playerArtist { color: var(--neon-cyan); font-size: 0.85rem; }
+
+
+
+
+/* Panel de Controles (Unificado) */
+.custom-controls {
+    flex-grow: 1;
+    max-width: 600px;
+    display: flex;
+    /* En modo barra: fila horizontal */
+    flex-direction: row; 
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    position: relative; /* Vital para el botón de esquina */
+    padding: 0;
+    background: transparent;
+    border: none;
+}
+
+/* Ocultar elementos innecesarios en modo Mini */
+.player-bar:not(.full-screen) .progress-row,
+.player-bar:not(.full-screen) .bottom-extras {
+    display: none; 
+}
+
+/* Botones principales en modo Mini */
+.player-bar:not(.full-screen) .main-controls {
+    margin: 0 auto;
+    width: auto;
+    display: flex; 
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 20;
+}
+
+@media (max-width: 768px) {
+    .player-bar:not(.full-screen) .main-controls {
+        position: relative; /* En móvil quitamos el absoluto para evitar solapamientos */
+        left: auto;
+        transform: none;
+        gap: 20px; /* Un poco menos de espacio en móvil */
+        margin-left: auto; /* Empujar a la derecha si hace falta */
+    }
+}
+
+/* =========================================
+   🔥 BOTÓN "ESQUINA DOBLADA" (PAGE FOLD)
+   ========================================= */
+.corner-fold-btn {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    width: 40px;
+    height: 40px;
+    /* Creamos un triángulo en la esquina superior derecha */
+    background: linear-gradient(225deg, var(--neon-cyan) 50%, transparent 51%);
+    cursor: pointer;
+    z-index: 20;
+    transition: all 0.3s ease;
+    border-top-right-radius: 15px; /* Coincide con el borde del panel */
+    box-shadow: -2px 2px 5px rgba(0,0,0,0.3);
+    
+    /* Centrar el icono dentro del triángulo */
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+    padding: 6px 8px 0 0;
+}
+
+.corner-fold-btn i {
+    color: #000; /* Icono negro para contraste con el cyan */
+    font-size: 0.8rem;
+    transform: rotate(0deg);
+    transition: transform 0.3s;
+}
+
+.corner-fold-btn:hover {
+    transform: scale(1.1);
+    filter: brightness(1.2);
+}
+
+/* Ocultar la esquina en modo Mini (Barra abajo) para no estorbar */
+.player-bar:not(.full-screen) .corner-fold-btn {
+    display: none;
+}
+
+/* =========================================
+   🔥 MODO FULL SCREEN (SOLUCIÓN DEFINITIVA)
+   ========================================= */
+.player-bar.full-screen {
+    height: 100vh;
+    bottom: 0;
+    padding: 0;
+    background: rgba(5, 5, 8, 0.98); /* Fondo casi sólido */
+    border-top: none;
+    flex-direction: column;
+    justify-content: center;
+    z-index: 11000;
+    /* Bloqueo de scroll del body se hace en JS */
+}
+
+.player-bar.full-screen .player-content {
+    flex-direction: column;
+    justify-content: space-evenly; /* Distribuye el espacio verticalmente */
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    padding-bottom: 60px; /* Espacio extra abajo */
+}
+
+/* 1. IMAGEN RESPONSIVE (No se rompe) */
+.player-bar.full-screen .track-info {
+    width: 100%;
+    display: flex; /* Aseguramos flex */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    
+    /* 🔓 LIBERAMOS EL ESPACIO: */
+    flex-grow: 1; 
+    max-height: none; /* Quitamos el límite estricto de 50vh */
+    height: auto;     /* Dejamos que crezca según necesite */
+    overflow: visible; /* 🔥 CLAVE: Permitimos que el texto se vea si se sale un poco */
+    margin-bottom: 20px; /* Separación de los controles */
+}
+
+.player-bar.full-screen .track-details {
+    overflow: visible !important; 
+    width: 100%;
+    margin-top: 20px; 
+    
+    /* 🔥 AQUÍ ESTÁ LA MAGIA QUE FALTABA: */
+    display: flex; 
+    flex-direction: column;
+    align-items: center; /* Centra los elementos hijos (flex items) */
+    text-align: center;  /* Centra el texto dentro de los elementos */
+}
+
+
+/* Asegurar que los hijos directos se centren también */
+.player-bar.full-screen #playerTitle, 
+.player-bar.full-screen #playerArtist, 
+.player-bar.full-screen #playerAlbum {
+    text-align: center;     /* Forzamos alineación de texto */
+    width: 100%;            /* Ocupan todo el ancho */
+    justify-content: center; /* Si son flex, se centran */
+    margin-left: auto;      /* Truco de seguridad flex */
+    margin-right: auto;     /* Truco de seguridad flex */
+}
+
+/* Corrección específica para el Marquee Container en Full Screen */
+.player-bar.full-screen .marquee-container {
+    text-align: center;
+    /* Si el marquee está activo, la máscara debe centrarse visualmente */
+    mask-image: linear-gradient(90deg, transparent 0%, black 20%, black 80%, transparent 100%);
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 20%, black 80%, transparent 100%);
+}
+
+/* Si el Marquee NO está activo (texto estático), aseguramos que el span interno esté centrado */
+.player-bar.full-screen .track-details > span {
+    display: block; /* Comportamiento de bloque para aceptar text-align center */
+}
+
+.player-bar.full-screen .img-wrapper {
+    width: 100%;
+    height: auto;
+    
+    /* Ajustamos el tamaño máximo para dar aire al texto */
+    max-width: 35vh; /* Usamos viewport height para que sea proporcional a la pantalla */
+    max-height: 35vh; 
+    aspect-ratio: 1/1;
+    margin: 0 auto;
+    flex-shrink: 0; /* Evita que la imagen se aplaste */
+}
+
+.player-bar.full-screen img {
+    width: 100%;
+    height: 100%;
+    box-shadow: 0 0 40px rgba(0, 243, 255, 0.2);
+    border: 2px solid var(--neon-cyan);
+}
+
+.player-bar.full-screen #playerTitle {
+    width: 100%;
+    display: flex !important;    /* Forzamos Flexbox */
+    justify-content: center !important; /* Centrado Horizontal absoluto */
+    align-items: center;
+    text-align: center;
+    margin: 15px 0 5px 0; /* Ajuste de márgenes */
+    position: relative;
+    overflow: hidden; /* Ocultamos lo que se salga */
+}
+
+
+.player-bar.full-screen .marquee-content {
+    display: flex;
+    justify-content: center !important; /* Centra los textos internos */
+    width: 100% !important; /* Ocupa todo el ancho disponible */
+    margin: 0 auto;
+    
+}
+
+
+.player-bar.full-screen #playerTitle > span {
+    width: 100%;
+    text-align: center;
+    display: block;
+}
+
+.player-bar.full-screen .marquee-container {
+    mask-image: none !important;
+    -webkit-mask-image: none !important;
+    text-align: center !important;
+}
+
+
+/* 2. PANEL DE CONTROLES (Full Screen) */
+.player-bar.full-screen .custom-controls {
+    width: 100%;
+    max-width: 400px; /* No muy ancho */
+    background: rgba(20, 20, 25, 0.6); /* Fondo semitransparente */
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 25px;
+    
+    /* Layout Vertical */
+    flex-direction: column;
+    gap: 20px;
+    flex-grow: 0; /* No estirar este panel */
+    overflow: hidden; /* Para que el botón de esquina corte bien */
+}
+
+/* Mostrar filas ocultas */
+.player-bar.full-screen .progress-row,
+.player-bar.full-screen .bottom-extras {
+    display: flex;
+    width: 100%;
+}
+
+/* Botón de esquina en Full Screen */
+.player-bar.full-screen .corner-fold-btn {
+    display: flex; /* Mostrar solo aquí */
+}
+
+/* Ajuste de botones en Full Screen */
+.player-bar.full-screen .main-controls {
+    width: 100%;
+    justify-content: center;
+    gap: 30px;
+    display: flex;
+}
+
+.play-large {
+    width: 60px; height: 60px; font-size: 1.5rem;
+}
+
+/* En mini mode el play large debe ser normal */
+.player-bar:not(.full-screen) .play-large {
+    width: 40px; height: 40px; font-size: 1rem;
+}
+
+/* =========================================
+   RESPONSIVE MÓVIL - PLAYER
+   ========================================= */
+@media (max-width: 768px) {
+    .player-bar {
+        height: 110px; /* Un poco más alto en móvil para que sea cómodo tocar */
+        padding-bottom: 15px; /* Subimos los controles un poco */
+        
+        /* Soporte para iPhone X/11/12/13/14/15 (Safe Area) */
+        padding-bottom: env(safe-area-inset-bottom); 
+    }
+
+    /* Hacemos los textos más pequeños para que quepan */
+    .track-info {
+        width: 60%; /* Más espacio al texto */
+    }
+
+    .custom-controls {
+        flex-grow: 0; /* Que los controles no empujen tanto */
+    }
+
+    /* Ocultamos elementos no esenciales en la barra mini móvil */
+    #durationText, #currentTimeText, #progressBar {
+        display: none; /* En modo barra mini móvil, quitamos la barra de tiempo para limpiar */
+    }
+
+    /* Pero SÍ los mostramos en Full Screen */
+    .player-bar.full-screen #durationText,
+    .player-bar.full-screen #currentTimeText,
+    .player-bar.full-screen #progressBar {
+        display: block;
+    }
+
+    
+    .player-bar.full-screen .custom-controls {
+        padding: 20px;
+        gap: 15px;
+    }
+
+    /* Forzamos que el volumen SÍ se muestre */
+    .player-bar.full-screen .volume-container {
+        display: flex !important; 
+    }
+
+    /* Ajuste para que la barra de volumen no se salga de la pantalla en móviles */
+    .volume-container.active #volumeBar {
+        width: 80px; /* Un poco más corto en móvil para evitar desbordes */
+    }
+
+    /* Asegurar separación correcta */
+    .player-bar.full-screen .bottom-extras {
+        padding: 0 15px; /* Un poco más de margen lateral en móvil */
+    }
+    
+    .player-bar.full-screen .bottom-extras {
+        justify-content: right; 
+    }
+}
+
+
+
+/* --- COMPONENTES AUXILIARES (MANTENIDOS PARA QUE FUNCIONE EL LAYOUT) --- */
+
 .neon-btn {
     background: transparent;
     border: 2px solid var(--neon-cyan);
@@ -631,18 +1025,39 @@ audio { display: none; }
     transform: scale(1.1);
 }
 
-/* Textos de tiempo */
-#currentTimeText, #durationText {
-    font-family: 'Rajdhani', sans-serif;
-    font-weight: bold;
+.ghost-btn {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #666;
+    width: 30px;
+    height: 30px;
     font-size: 0.8rem;
-    color: #fff;
-    min-width: 35px;
+    box-shadow: none;
+    opacity: 0.7;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-/* --- ESTILIZANDO LOS SLIDERS (INPUT RANGE) --- */
-/* Esto es complejo porque cada navegador requiere prefijos distintos */
+.ghost-btn:hover {
+    border-color: var(--neon-purple);
+    color: var(--neon-purple);
+    opacity: 1;
+    transform: scale(1.1);
+    box-shadow: 0 0 10px rgba(188, 19, 254, 0.3);
+}
 
+.ghost-btn.active-mode {
+    background: var(--neon-purple);
+    color: #fff;
+    border-color: var(--neon-purple);
+    opacity: 1;
+    box-shadow: 0 0 15px var(--neon-purple);
+}
+
+/* Sliders */
 .progress-container {
     flex-grow: 1;
     display: flex;
@@ -652,14 +1067,13 @@ audio { display: none; }
 
 input[type=range] {
     appearance: none;
-    -webkit-appearance: none; /* Quitar estilo default de Chrome/Safari */
+    -webkit-appearance: none; 
     width: 100%;
     background: transparent;
 }
 
 input[type=range]:focus { outline: none; }
 
-/* LA BARRA (TRACK) */
 input[type=range]::-webkit-slider-runnable-track {
     width: 100%;
     height: 4px;
@@ -669,7 +1083,6 @@ input[type=range]::-webkit-slider-runnable-track {
     box-shadow: 0 0 2px var(--neon-purple);
 }
 
-/* EL BOTÓN QUE DESLIZAS (THUMB) */
 input[type=range]::-webkit-slider-thumb {
     height: 12px;
     width: 12px;
@@ -677,43 +1090,89 @@ input[type=range]::-webkit-slider-thumb {
     background: var(--neon-pink);
     cursor: pointer;
     -webkit-appearance: none;
-    margin-top: -4px; /* Centrar verticalmente */
+    margin-top: -4px; 
     box-shadow: 0 0 10px var(--neon-pink);
     transition: transform 0.1s;
 }
 
-input[type=range]::-webkit-slider-thumb:hover {
-    transform: scale(1.5);
-}
-
-/* Ajuste Responsive Móvil */
-@media (max-width: 768px) {
-    .custom-controls {
-        width: 100%;
-        padding: 5px 10px;
-        border-radius: 15px;
-        flex-wrap: wrap; /* Permitir que baje si es necesario */
-        justify-content: center;
-    }
-    
-    .volume-container {
-        display: none; /* Ocultar volumen en móvil para ahorrar espacio */
-    }
-    
-    .neon-btn {
-        width: 35px; height: 35px;
-    }
-}
+input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.5); }
 
 .volume-container {
     display: flex;
     align-items: center;
-    gap: 8px;
-    width: 100px;
+    gap: 10px;
+    /* Fondo sutil opcional cuando se abre */
+    background: transparent; 
+    border-radius: 20px;
+    transition: all 0.3s ease;
 }
-.volume-container i { color: var(--neon-cyan); font-size: 0.8rem; }
 
-/* --- PAGINACIÓN CYBERPUNK --- */
+.vol-btn {
+    border: none !important; /* Sin borde por defecto, como pediste */
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--neon-cyan);
+    cursor: pointer;
+    background: transparent;
+    flex-shrink: 0; /* 🔥 IMPORTANTE: Evita que se aplasten en móviles */
+    transition: all 0.3s ease;
+}
+
+.vol-btn.active-mode {
+    color: #fff;
+    text-shadow: 0 0 10px var(--neon-cyan), 0 0 20px var(--neon-cyan);
+    background: radial-gradient(circle, rgba(0, 243, 255, 0.2) 0%, transparent 70%);
+    transform: scale(1.1);
+}
+
+#volumeBar {
+    width: 0;              /* Ancho cero */
+    opacity: 0;            /* Invisible */
+    transform: scaleX(0);  /* Colapsada */
+    transform-origin: left; /* Crece desde la izquierda */
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Efecto rebote suave */
+    pointer-events: none;  /* No clickeable cuando está oculta */
+}
+
+/* Estado VISIBLE (Se activa con clase JS .active) */
+.volume-container.active #volumeBar {
+    width: 100px;          /* Ancho final */
+    opacity: 1;
+    transform: scaleX(1);
+    pointer-events: all;
+    margin-right: 10px;    /* Espacio extra */
+}
+
+/* Ajuste del botón loop para que no se mueva */
+.autoplay-mini {
+    flex-shrink: 0; /* Evita que se aplaste */
+    width: 30px;
+    height: 30px;
+    font-size: 0.85rem;
+    border: 1px solid rgba(0, 243, 255, 0.3);
+    color: rgba(255, 255, 255, 0.5);
+    background: transparent;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Filas internas del player (flex) */
+.controls-row { display: flex; align-items: center; width: 100%; }
+.progress-row { gap: 15px; }
+.bottom-extras { justify-content: space-between; margin-top: 5px; }
+
+/* Ocultar audio nativo */
+audio { display: none; }
+
+/* --- PAGINACIÓN Y OTROS ELEMENTOS NO PLAYER --- */
 .pagination-container {
   display: flex;
   justify-content: center;
@@ -750,22 +1209,14 @@ input[type=range]::-webkit-slider-thumb:hover {
   color: #555;
 }
 
-.page-info {
-  color: #fff;
-  font-family: var(--font-body);
-  font-size: 1rem;
-  letter-spacing: 1px;
-}
+.page-info { color: #fff; font-size: 1rem; letter-spacing: 1px; }
 
-/* --- PANTALLA DE INICIO (OVERLAY) --- */
+/* Overlay Bienvenida */
 .welcome-overlay {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #000; /* Fondo negro total */
-    z-index: 20000; /* Por encima de TODO (incluso del player) */
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-color: #000;
+    z-index: 20000;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -773,16 +1224,7 @@ input[type=range]::-webkit-slider-thumb:hover {
     transition: opacity 0.8s ease-out, visibility 0.8s;
 }
 
-/* Clase para ocultarlo suavemente */
-.welcome-overlay.hidden {
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-}
-
-.welcome-content {
-    text-align: center;
-}
+.welcome-overlay.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
 
 .terminal-text {
     font-family: 'Courier New', monospace;
@@ -793,10 +1235,7 @@ input[type=range]::-webkit-slider-thumb:hover {
     animation: typeEffect 1s forwards;
 }
 
-/* Retraso para la segunda línea */
-.terminal-text:nth-child(3) {
-    animation-delay: 0.8s;
-}
+.terminal-text:nth-child(3) { animation-delay: 0.8s; }
 
 @keyframes typeEffect {
     from { opacity: 0; transform: translateY(10px); }
@@ -817,16 +1256,12 @@ input[type=range]::-webkit-slider-thumb:hover {
     transition: all 0.3s;
     text-shadow: 0 0 5px var(--neon-pink);
     box-shadow: 0 0 10px rgba(255, 0, 85, 0.3);
-    
-    /* Animación de aparición */
     opacity: 0;
     animation: fadeInBtn 0.5s forwards;
     animation-delay: 1.5s;
 }
 
-@keyframes fadeInBtn {
-    to { opacity: 1; }
-}
+@keyframes fadeInBtn { to { opacity: 1; } }
 
 .cyber-btn:hover {
     background: var(--neon-pink);
@@ -834,3 +1269,771 @@ input[type=range]::-webkit-slider-thumb:hover {
     box-shadow: 0 0 30px var(--neon-pink);
 }
 
+/* Links Texto Artista */
+.song-info p {
+    color: #aaa;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: 4px;
+}
+
+.clickable-link {
+    color: var(--neon-cyan);
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+    border-bottom: 1px solid transparent;
+}
+
+.clickable-link:hover {
+    color: #fff;
+    text-shadow: 0 0 5px var(--neon-cyan);
+}
+
+.album-link {
+    color: var(--neon-purple);
+    font-size: 0.75rem;
+    display: block;
+    margin-top: 2px;
+}
+
+
+
+.album-text-only {
+    color: #666;
+    font-size: 0.75rem;
+    display: block;
+    margin-top: 2px;
+    cursor: default;
+    font-style: italic;
+}
+
+.back-btn-header {
+    background: transparent;
+    border: 1px solid var(--neon-cyan);
+    color: var(--neon-cyan);
+    padding: 5px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-weight: bold;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.back-btn-header:hover {
+    background: var(--neon-cyan);
+    color: #000;
+    box-shadow: 0 0 10px var(--neon-cyan);
+}
+
+/* =========================================
+   DASHBOARD HOME
+   ========================================= */
+.dashboard-container {
+    max-width: 1200px;
+    margin: 0 auto 30px auto;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(0, 243, 255, 0.1);
+    border-radius: 15px;
+    backdrop-filter: blur(5px);
+}
+
+.dashboard-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 20px;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+    padding-bottom: 20px;
+}
+
+.cyber-select-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+}
+
+.cyber-select-wrapper label {
+    font-size: 0.7rem;
+    color: var(--neon-cyan);
+    letter-spacing: 1px;
+    font-weight: bold;
+}
+
+.cyber-select {
+    background: #000;
+    color: #fff;
+    border: 1px solid #333;
+    padding: 8px 15px;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    outline: none;
+    min-width: 180px;
+    transition: all 0.3s;
+}
+
+.cyber-select:hover, .cyber-select:focus {
+    border-color: var(--neon-cyan);
+    box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
+}
+
+.cyber-toggle-wrapper {
+    display: flex;
+    background: rgba(0,0,0,0.5);
+    border-radius: 30px;
+    padding: 4px;
+    border: 1px solid #333;
+}
+
+.toggle-btn {
+    background: transparent;
+    border: none;
+    color: #888;
+    padding: 8px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: var(--font-title);
+    font-size: 0.8rem;
+    transition: all 0.3s;
+}
+
+.toggle-btn.active {
+    background: var(--neon-purple);
+    color: #fff;
+    box-shadow: 0 0 10px var(--neon-purple);
+}
+
+.genre-scroll-container {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--neon-cyan) #000;
+}
+
+.genre-scroll-container::-webkit-scrollbar { height: 4px; }
+.genre-scroll-container::-webkit-scrollbar-track { background: #000; }
+.genre-scroll-container::-webkit-scrollbar-thumb { background: var(--neon-cyan); border-radius: 2px; }
+
+.genre-chip {
+    background: transparent;
+    border: 1px solid #444;
+    color: #aaa;
+    padding: 6px 15px;
+    border-radius: 20px;
+    white-space: nowrap;
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    transition: all 0.3s;
+}
+
+.genre-chip:hover {
+    border-color: var(--neon-cyan);
+    color: var(--neon-cyan);
+    transform: translateY(-2px);
+}
+
+.genre-chip.active {
+    background: var(--neon-cyan);
+    color: #000;
+    border-color: var(--neon-cyan);
+    font-weight: bold;
+    box-shadow: 0 0 10px var(--neon-cyan);
+}
+
+@media (max-width: 768px) {
+    .dashboard-controls { flex-direction: column; align-items: stretch; }
+    .cyber-select { width: 100%; }
+    .cyber-toggle-wrapper { justify-content: center; }
+}
+
+/* --- CARRUSEL & HOME --- */
+.home-container { padding-bottom: 50px; animation: fadeIn 0.5s ease; }
+
+.hero-banner {
+    background: linear-gradient(135deg, rgba(188, 19, 254, 0.6), rgba(0, 243, 255, 0.2));
+    border-radius: 20px;
+    padding: 40px 30px;
+    margin-bottom: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.section-title {
+    font-family: var(--font-title);
+    color: #fff;
+    margin-bottom: 15px;
+    font-size: 1.4rem;
+    padding-left: 10px;
+    border-left: 4px solid var(--neon-cyan);
+}
+
+.carousel-section { margin-bottom: 40px; }
+
+.carousel-wrapper {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    padding: 10px 5px 20px 5px;
+    scroll-behavior: smooth;
+    scrollbar-width: none; 
+}
+.carousel-wrapper::-webkit-scrollbar { display: none; }
+
+.carousel-card {
+    min-width: 160px;
+    width: 160px;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.carousel-card:hover { transform: scale(1.05); }
+
+.carousel-card img {
+    width: 100%;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    margin-bottom: 8px;
+}
+
+.carousel-card h4 {
+    font-size: 0.9rem;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #fff;
+}
+
+.carousel-card p {
+    font-size: 0.8rem;
+    color: #aaa;
+    margin: 2px 0 0 0;
+}
+
+.pills-container { display: flex; gap: 15px; flex-wrap: wrap; }
+
+.country-pill {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--neon-cyan);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+
+.country-pill:hover {
+    background: var(--neon-cyan);
+    color: #000;
+    box-shadow: 0 0 15px var(--neon-cyan);
+}
+
+/* ARTIST HERO */
+.hidden { display: none !important; }
+
+.artist-hero {
+    position: relative;
+    width: 100%;
+    height: 300px; 
+    margin-bottom: 30px;
+    border-radius: 0 0 20px 20px;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end; 
+}
+
+.hero-backdrop {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-size: cover;
+    background-position: center;
+    filter: blur(20px) brightness(0.4);
+    z-index: 0;
+    transform: scale(1.1); 
+}
+
+.hero-content-artist {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    padding: 30px;
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+}
+
+.hero-avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%; 
+    border: 4px solid var(--neon-cyan);
+    object-fit: cover;
+    box-shadow: 0 0 30px rgba(0, 243, 255, 0.4);
+}
+
+.hero-text h1 {
+    font-size: 3rem;
+    margin: 0;
+    text-shadow: 0 0 20px var(--neon-purple);
+}
+
+.back-btn-floating {
+    /* 🔥 POSICIONAMIENTO ABSOLUTO (Esquina Superior Izquierda) */
+    position: absolute;
+    top: 20px;       /* Distancia desde arriba */
+    left: 20px;      /* Distancia desde la izquierda */
+    z-index: 20;     /* Aseguramos que esté por encima de la imagen y sombras */
+    
+    /* Estética */
+    background: rgba(0, 0, 0, 0.5); /* Fondo oscuro semitransparente */
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #fff;
+    
+    /* Forma circular perfecta o botón pastilla */
+    width: 40px;      /* Ancho fijo */
+    height: 40px;     /* Alto fijo */
+    border-radius: 50%; /* Círculo perfecto */
+    
+    /* Centrar la flecha dentro del círculo */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    padding: 0;       /* Quitamos relleno extra */
+    margin: 0;        /* Quitamos márgenes viejos */
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px); /* Efecto cristal */
+}
+
+.back-btn-floating i {
+    font-size: 1.2rem; /* Tamaño de la flecha */
+}
+
+.back-btn-floating:hover {
+    background: #fff;
+    color: #000;
+    transform: scale(1.1);
+}
+
+#resultsView { width: 100%; }
+#resultsView .results-grid { margin-top: 0; }
+
+@media (max-width: 768px) {
+    .hero-content-artist { flex-direction: column; text-align: center; }
+    .hero-avatar { width: 120px; height: 120px; }
+    .hero-text h1 { font-size: 2rem; }
+    .artist-hero { height: auto; }
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-right: 10px;
+}
+
+.view-all-btn {
+    background: transparent;
+    border: 1px solid var(--neon-cyan);
+    color: var(--neon-cyan);
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    font-family: var(--font-body);
+    transition: all 0.3s;
+}
+
+.view-all-btn:hover {
+    background: var(--neon-cyan);
+    color: #000;
+    box-shadow: 0 0 10px var(--neon-cyan);
+}
+
+.playlist-card {
+    min-width: 140px;
+    width: 140px;
+    height: 140px;
+    position: relative;
+    cursor: pointer;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.playlist-card:hover { transform: scale(1.05); border-color: var(--neon-purple); }
+
+.playlist-card img {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    display: block;
+    filter: brightness(0.6); 
+}
+
+.playlist-overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 10px;
+}
+
+.playlist-title {
+    color: #fff;
+    font-weight: bold;
+    font-size: 1rem;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+    text-transform: uppercase;
+}
+
+.playlist-flag {
+    font-size: 2rem;
+    margin-bottom: 5px;
+    text-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+
+/* =========================================
+   BOTÓN FLOTANTE MINIMIZAR (NUEVO)
+   ========================================= */
+#fsMinimizeBtn {
+    position: absolute;
+    top: 40px;  /* Ajusta la altura si choca con tu muesca/notch */
+    left: 30px;
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 1.5rem; /* Tamaño grande como la imagen */
+    cursor: pointer;
+    z-index: 12000; /* Por encima de todo el player */
+    display: none; /* Oculto por defecto */
+    filter: drop-shadow(0 2px 5px rgba(0,0,0,0.8)); /* Sombra para contraste */
+    transition: transform 0.2s, color 0.3s;
+    padding: 8px;
+}
+
+#fsMinimizeBtn:hover {
+    transform: scale(1.1);
+    color: var(--neon-cyan);
+}
+
+/* Mostrar SOLO cuando el player tiene la clase .full-screen */
+.player-bar.full-screen #fsMinimizeBtn {
+    display: block;
+    animation: fadeInBtn 0.5s forwards;
+}
+
+/* Opcional: Ocultar el botón de expandir pequeño cuando ya estás en full screen */
+.player-bar.full-screen .corner-fold-btn {
+    display: none !important;
+}
+
+/* Ajuste para móviles */
+@media (max-width: 768px) {
+    #fsMinimizeBtn {
+        top: 10px;
+        left: 20px;
+        font-size: 1.2rem;
+    }
+}
+
+
+.song-card:hover .play-btn-card {
+    transform: scale(1.1);
+}
+
+/* Hover (cuando está apagado) */
+.autoplay-mini:hover {
+    border-color: var(--neon-cyan);
+    color: #fff;
+    transform: scale(1.1);
+}
+
+/* ESTADO ACTIVO (ON) - Lógica existente en tu JS (.active-mode) */
+.autoplay-mini.active-mode {
+    background: rgba(0, 243, 255, 0.1); /* Fondo sutil */
+    border-color: var(--neon-cyan);
+    color: var(--neon-cyan);
+    box-shadow: 0 0 10px var(--neon-cyan);
+    opacity: 1;
+    animation: neonPulse 2s infinite;
+}
+
+@keyframes neonPulse {
+    0% { box-shadow: 0 0 5px var(--neon-cyan); }
+    50% { box-shadow: 0 0 12px var(--neon-cyan), 0 0 2px #fff; }
+    100% { box-shadow: 0 0 5px var(--neon-cyan); }
+}
+
+/* Ajuste Responsive para que quepa bien en móviles */
+@media (max-width: 768px) {
+    .autoplay-mini {
+        width: 28px;
+        height: 28px;
+        font-size: 0.8rem;
+        margin-left: 10px;
+    }
+}
+
+
+.bottom-extras {
+    display: flex;
+    /* Esto empuja el volumen a la izquierda y el loop a la derecha */
+    justify-content: space-between !important; 
+    align-items: center;
+    width: 100%;
+    padding: 0 5px;
+    margin-top: 15px;
+    position: relative; /* Para control de capas */
+}
+
+/* Ajuste opcional para móviles para que no queden muy separados */
+@media (max-width: 768px) {
+    .main-controls {
+        gap: 20px; /* Menos espacio en pantallas pequeñas */
+    }
+}
+
+
+/* =======================================================
+   FIX MÓVIL: ELIMINAR "STICKY HOVER" (HOVER PEGADO)
+   ======================================================= */
+
+/* Detectamos dispositivos TÁCTILES (sin mouse preciso) */
+@media (hover: none) {
+    
+    /* 1. ANULAMOS el efecto hover que se queda pegado */
+    .neon-btn:hover, 
+    .ghost-btn:hover, 
+    .autoplay-mini:hover,
+    .action-btn:hover,
+    .play-btn-card:hover {
+        transform: none !important;
+        box-shadow: none !important;
+        filter: none !important;
+        /* Mantenemos el color base o el que tenga por defecto */
+        color: inherit; 
+    }
+
+    /* 2. ACTIVAMOS el efecto SOLO al pulsar (Active) */
+    /* Esto simula una pulsación física: brilla y se encoge un poco */
+    .neon-btn:active, 
+    .ghost-btn:active,
+    .autoplay-mini:active,
+    .action-btn:active {
+        transform: scale(0.95) !important; /* Pequeño rebote hacia adentro */
+        color: #fff !important;
+        
+        /* Efecto Neón Momentáneo */
+        text-shadow: 0 0 10px var(--neon-cyan);
+        box-shadow: 0 0 15px var(--neon-cyan); 
+    }
+
+    /* Ajuste especial para el botón Play grande */
+    .play-large:active {
+        transform: scale(0.95) !important;
+        background: var(--neon-cyan) !important;
+        color: #000 !important;
+        box-shadow: 0 0 20px var(--neon-cyan) !important;
+    }
+    
+    /* Ajuste especial para el botón de Autoplay cuando está activo */
+    .autoplay-mini.active-mode {
+         /* Este se queda igual porque indica estado ON/OFF, no hover */
+         box-shadow: 0 0 10px var(--neon-cyan); 
+    }
+}
+
+/* =======================================================
+   FIX FINAL: QUITAR BRILLO PEGADO AL SOLTAR (FOCUS FIX)
+   ======================================================= */
+
+/* 1. Quitar el borde azul o gris nativo de todos los navegadores */
+button:focus {
+    outline: none !important;
+}
+
+/* 2. Regla específica para móviles: 
+      Al tener el foco (después de tocar), volver al estado transparente */
+@media (hover: none) {
+    
+    /* Para el botón Play Grande */
+    .play-large:focus:not(:active) {
+        background: transparent !important;
+        color: var(--neon-cyan) !important;
+        box-shadow: 0 0 5px var(--neon-cyan) !important; /* Vuelve al brillo suave base */
+        transform: scale(1) !important; /* Vuelve a tamaño normal */
+    }
+
+    /* Para los botones pequeños (Next/Prev/Volumen/Loop) */
+    .neon-btn:focus:not(:active),
+    .ghost-btn:focus:not(:active),
+    .vol-btn:focus:not(:active) {
+        background: transparent !important;
+        transform: none !important;
+        box-shadow: 0 0 5px var(--neon-cyan) !important;
+        filter: none !important;
+    }
+    
+    /* Caso especial: Botón Loop cuando ESTÁ ENCENDIDO (Active Mode) */
+    /* Este sí queremos que brille si está activado, aunque tenga foco */
+    .vol-btn.active-mode:focus:not(:active) {
+        /* Mantenemos los estilos de activado */
+        color: #fff !important;
+        text-shadow: 0 0 10px var(--neon-cyan), 0 0 20px var(--neon-cyan) !important;
+        background: radial-gradient(circle, rgba(0, 243, 255, 0.2) 0%, transparent 70%) !important;
+    }
+}
+
+
+/* =========================================
+   LINKS EN EL REPRODUCTOR (ARTISTA Y ÁLBUM)
+   ========================================= */
+
+/* Estilo base para los textos clicables del player */
+#playerArtist, #playerAlbum {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    display: block; /* Asegura que caigan en líneas separadas */
+}
+
+/* Estilo específico ARTISTA (Cian) */
+#playerArtist {
+    color: var(--neon-cyan);
+    font-size: 0.9rem;
+    font-weight: bold;
+    margin-top: 2px;
+}
+
+#playerArtist:hover {
+    color: #fff;
+    text-shadow: 0 0 8px var(--neon-cyan);
+}
+
+/* Estilo específico ÁLBUM (Morado y más pequeño) */
+#playerAlbum {
+    display: block; /* Asegura que ocupe su propia línea */
+    color: var(--neon-purple);
+    font-size: 0.75rem;
+    margin-top: 2px;
+    cursor: pointer;
+}
+#playerAlbum:hover {
+    color: #fff;
+    text-shadow: 0 0 8px var(--neon-purple);
+    text-decoration: underline;
+}
+
+/* FIX: AJUSTE DE ALTURA PARA INFO DE 3 LÍNEAS EN PLAYER */
+.track-details {
+    justify-content: center;
+    line-height: 1.2; /* Reducir espacio entre líneas */
+}
+
+#playerTitle {
+    font-size: 0.95rem;
+    margin-bottom: 2px;
+}
+
+#playerArtist {
+    font-size: 0.85rem;
+    margin-bottom: 1px;
+}
+
+#playerAlbum {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--neon-purple);
+    opacity: 0.8;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* =========================================
+   🔥 MARQUEE / SCROLL DE TEXTO (SPOTIFY STYLE)
+   ========================================= */
+
+/* 1. El Contenedor: Define la ventana visible */
+.marquee-container {
+    position: relative;
+    overflow: hidden; /* Esconde lo que se salga */
+    white-space: nowrap; /* PROHIBIDO romper líneas aquí */
+    width: 100%;
+    display: block;
+    
+    /* Máscara de desvanecimiento en los bordes */
+    mask-image: linear-gradient(90deg, transparent 0%, black 5%, black 95%, transparent 100%);
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 5%, black 95%, transparent 100%);
+}
+
+/* 2. El Riel: Contiene los dos textos */
+.marquee-content {
+    display: flex; /* 🔥 FLEX ES LA CLAVE: Pone los hijos lado a lado */
+    align-items: center; /* Centra verticalmente */
+    white-space: nowrap; /* Asegura que no haya saltos de línea */
+    width: max-content; /* 🔥 OBLIGATORIO: El ancho es la suma de los textos */
+    will-change: transform; /* Optimización para el navegador */
+}
+
+/* Clase de animación (sin cambios, solo para referencia) */
+.animate-scroll {
+    animation: scroll-left linear infinite;
+}
+/* Animación: Mueve el contenido -50% (porque duplicamos el texto) */
+@keyframes scroll-left {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+/* Ajustes específicos para los elementos del track-details */
+.track-details span {
+    max-width: 100%;
+    display: block; /* Importante para que el overflow funcione */
+}
+
+/* Separador seguro */
+.marquee-spacer {
+    display: inline-block;
+    min-width: 40px; /* Un poco más de espacio */
+}
+
+/* Aseguramos que los controles principales estén siempre centrados */
+.main-controls {
+    display: flex;
+    align-items: center;
+    
+    /* 🔥 LA SOLUCIÓN: */
+    justify-content: center; /* 1. Centra los botones horizontalmente dentro del div */
+    width: 100%;             /* 2. Obliga al div a ocupar todo el ancho disponible */
+    margin: 0 auto;          /* 3. Refuerzo para centrar el bloque en sí mismo */
+}
