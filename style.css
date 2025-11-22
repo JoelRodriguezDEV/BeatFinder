@@ -12,7 +12,6 @@
 
 * {
   box-sizing: border-box;
-  /* 🔥 ESTO ELIMINA EL DESTELLO CUADRADO AZUL EN MÓVILES */
   -webkit-tap-highlight-color: transparent;
   focus-visible {
     outline: 2px solid var(--neon-cyan); /* Borde neón solo cuando se usa teclado */
@@ -30,13 +29,11 @@ body {
   font-family: var(--font-body);
   background-color: var(--bg-dark);
   color: var(--text-main);
-  /* 🔥 ESTO ES LO NUEVO PARA EL FOOTER FIJO: */
   min-height: 100vh;       /* 1. Altura mínima del 100% de la ventana */
   display: flex;           /* 2. Convertimos el body en caja flexible */
   flex-direction: column;  /* 3. Organizamos los elementos en columna vertical */
   width: 100%;
   overflow-x: hidden;
-  padding-bottom: 0; 
 }
 
 /* Fondo Grid Animado */
@@ -105,14 +102,19 @@ h1:active { transform: scale(0.98); }
    ========================================= */
 
 .cyber-footer-pro {
-    background: #08080a; /* Fondo un poco más oscuro que el body */
+    background: #08080a;
     border-top: 1px solid rgba(0, 243, 255, 0.1);
-    padding: 40px 20px 100px 20px; /* Padding inferior extra para el player */
+    padding: 40px 20px 120px 20px;
+    box-shadow: inset 0 -20px 30px rgba(0,0,0,0.8);
+    margin: 0; 
     margin-top: auto;
     position: relative;
     z-index: 10;
     font-family: var(--font-body);
 }
+
+
+
 
 .footer-container {
     max-width: 1200px;
@@ -240,6 +242,11 @@ h1:active { transform: scale(0.98); }
     .footer-heading { border-left: none; border-bottom: 2px solid var(--neon-pink); padding-bottom: 5px; display: inline-block; }
     .legal-text { text-align: center; }
     .footer-socials { justify-content: center; }
+
+    .cyber-footer-pro {
+        margin-bottom: 0 !important; 
+        padding-bottom: 140px; 
+    }
 }
 
 .subtitle {
@@ -1735,8 +1742,8 @@ audio { display: none; }
    ========================================= */
 #fsMinimizeBtn {
     position: absolute;
-    top: 40px;  /* Ajusta la altura si choca con tu muesca/notch */
-    left: 30px;
+    top: calc(15px + env(safe-area-inset-top));
+    left: 20px;
     background: transparent;
     border: none;
     color: #fff;
@@ -2074,4 +2081,46 @@ button:focus {
         height: 40px;
         margin-right: 8px;
     }
+}
+
+
+/* Método 1: Si el navegador soporta :has (Moderno) */
+body:has(.player-bar.full-screen) .cyber-footer-pro {
+    display: none !important;
+}
+
+/* Método 2: Selector de hermanos (Clásico y Robusto) */
+/* Esto dice: "Si hay un player full-screen, esconde el footer que le sigue" */
+.player-bar.full-screen ~ .cyber-footer-pro {
+    display: none !important;
+}
+
+
+/* SKELETON LOADING ANIMATIONS */
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+.skeleton-card {
+    background: #1a1a1d; /* Fondo base oscuro */
+    border-radius: 12px;
+    height: 200px; /* Altura aproximada de tu song-card */
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* El efecto de brillo que pasa */
+.skeleton-card::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(90deg, 
+        rgba(255,255,255,0) 0%, 
+        rgba(255,255,255,0.05) 50%, 
+        rgba(255,255,255,0) 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
 }

@@ -83,6 +83,7 @@ let debounceTimer;
 // 2. INICIALIZACIÓN (Cargar Top 100 al inicio)
 document.addEventListener('DOMContentLoaded', () => {
     initHomeView();
+    initPlayerState();
 });
 
 const headerTitle = document.querySelector('header h1');
@@ -164,6 +165,50 @@ async function initHomeView() {
     renderCollectionList(ALL_GENRES, 8, 'carouselGenres', '', 'genre');
     renderCollectionList(ALL_COUNTRIES, 8, 'carouselCountries', '', 'country');
 }
+
+function initPlayerState() {
+    // 1. Recuperar Volumen
+    const savedVol = localStorage.getItem('bf_volume');
+    if (savedVol) {
+        volumeBar.value = savedVol;
+        mainAudio.volume = savedVol / 100;
+        // Si usas gainNode (iOS fix), configúralo también si ya se inició el contexto
+        // (Nota: gainNode suele necesitar interacción usuario primero, así que basta con actualizar la UI visual)
+    }
+
+    // 2. Recuperar Última Canción
+    const savedTrackJSON = localStorage.getItem('bf_lastTrack');
+    if (savedTrackJSON) {
+        try {
+            const { song, imageUrl, id } = JSON.parse(savedTrackJSON);
+            
+            // Restauramos la UI visualmente (SIN DAR PLAY AUTOMÁTICO para respetar políticas de navegadores)
+            globalPlayer.classList.add('visible'); // Mostramos la barra
+            playerImg.src = imageUrl;
+            playerImg.classList.remove('hidden');
+            
+            // Textos
+            setMarquee(playerTitle, song.trackName, false);
+            
+            // Artista (reconstruimos el HTML)
+            const safeArtist = song.artistName ? song.artistName.replace(/'/g, "\\'") : '';
+            const artistHTML = `<span class="clickable-link" onclick="event.stopPropagation(); toggleFullScreen(false); loadArtistData('${song.artistId}', '${safeArtist}')">${song.artistName}</span>`;
+            setMarquee(playerArtist, artistHTML, true);
+
+            // Preparamos el audio (src) pero NO llamamos a .play()
+            let secureUrl = song.previewUrl;
+            if (secureUrl && secureUrl.startsWith('http://')) secureUrl = secureUrl.replace('http://', 'https://');
+            mainAudio.src = secureUrl;
+            
+            // Actualizamos ID global para que los botones play/pause de la lista funcionen
+            currentPlayingId = id;
+
+        } catch (e) {
+            console.error("Error restaurando sesión:", e);
+        }
+    }
+}
+
 
 // 4.1 RENDERIZADOR GENÉRICO DE LISTAS (GÉNEROS Y PAÍSES)
 function renderCollectionList(dataArray, limit, containerId, title, type) {
@@ -451,7 +496,7 @@ async function performSearch() {
     artistHero.classList.add('hidden'); 
     saveCurrentState(); // Guardar estado por si quiere volver
 
-    resultsGrid.innerHTML = '<div class="empty-state"><i class="fas fa-circle-notch fa-spin"></i> LOADING...</div>';
+    showSkeletonLoading();
     document.getElementById('pagination').innerHTML = '';
 
     currentHeaderHTML = '';
@@ -811,6 +856,8 @@ function playTrack(song, imageUrl, id) {
             updateVisualState(id, false);
         }
     }
+
+    
 }
 
 // 🔥 BONUS: Sincronizar si el usuario usa los controles nativos del footer
@@ -1030,6 +1077,12 @@ function playTrack(song, imageUrl, id) {
     // 4. Inicializar Visualizador (Si no está listo)
     if (!isVisualizerInit) initVisualizer();
     if (audioContext && audioContext.state === 'suspended') audioContext.resume();
+
+    localStorage.setItem('bf_lastTrack', JSON.stringify({
+        song: song,
+        imageUrl: imageUrl,
+        id: id
+    }));
 }
 
 progressiveBtn.addEventListener('click', () => {
@@ -1155,7 +1208,7 @@ progressBar.addEventListener('input', () => {
     mainAudio.currentTime = (progressBar.value / 100) * duration;
 });
 
-// 4. Control de Volumen
+
 // 4. Control de Volumen (Híbrido: PC/Android + iOS GainNode)
 volumeBar.addEventListener('input', (e) => {
     const volumeValue = e.target.value / 100;
@@ -1182,6 +1235,8 @@ volumeBar.addEventListener('input', (e) => {
         volumeIcon.className = 'fas fa-volume-up'; // Icono Volumen Alto
         volumeIcon.style.color = 'var(--neon-cyan)';
     }
+
+    localStorage.setItem('bf_volume', e.target.value);
 });
 
 // 5. Formatear tiempo (de segundos a MM:SS)
@@ -2034,3 +2089,15 @@ window.addEventListener('resize', () => {
         }
     }
 });
+
+
+function showSkeletonLoading() {
+    resultsGrid.innerHTML = ''; // Limpiar
+    const skeletonCount = 10; // Cuántas tarjetas falsas mostrar
+    
+    for (let i = 0; i < skeletonCount; i++) {
+        const div = document.createElement('div');
+        div.className = 'skeleton-card';
+        resultsGrid.appendChild(div);
+    }
+}

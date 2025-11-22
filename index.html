@@ -107,59 +107,6 @@
     </main>
   </div>
 
- <div id="globalPlayer" class="player-bar">
-
-  <button id="fsMinimizeBtn">
-        <i class="fas fa-chevron-down"></i>
-    </button>
-    
-    <canvas id="audioVisualizer"></canvas>
-
-    <div class="player-content">
-        
-        <div class="track-info">
-            <div class="img-wrapper"> <img id="playerImg" src="" alt="" class="hidden">
-            </div>
-            <div class="track-details">
-                <span id="playerTitle">Select a track</span>
-                <span id="playerArtist">...</span>
-                <span id="playerAlbum"></span>
-            </div>
-        </div>
-
-        <div class="custom-controls">
-            
-            <div class="corner-fold-btn" id="togglePlayerBtn">
-                <i class="fas fa-expand-alt"></i>
-            </div>
-
-            <div class="controls-row main-controls">
-                <button id="prevTrackBtn" class="neon-btn small-control"><i class="fas fa-step-backward"></i></button>
-                <button id="playPauseBtn" class="neon-btn play-large"><i class="fas fa-play"></i></button>
-                <button id="nextTrackBtn" class="neon-btn small-control"><i class="fas fa-step-forward"></i></button>
-              </div>
-
-            <div class="controls-row progress-row">
-                <span id="currentTimeText">0:00</span>
-                <input type="range" id="progressBar" value="0" min="0" max="100" step="1">
-                <span id="durationText">0:30</span>
-            </div>
-
-           <div class="controls-row bottom-extras">
-    <div class="volume-container" id="volumeContainer">
-        <button id="toggleVolumeBtn" class="ghost-btn vol-btn">
-            <i class="fas fa-volume-up"></i>
-        </button>
-        <input type="range" id="volumeBar" value="100" min="0" max="100">
-    </div>
-
-   <button id="progressiveBtn" class="ghost-btn vol-btn" title="Repetir Canción (Loop)">
-        <i class="fas fa-repeat"></i>
-    </button>
-</div>
-        <audio id="mainAudio" crossorigin="anonymous" preload="auto"></audio>
-    </div>
-</div>
     
   <footer class="cyber-footer-pro">
     <div class="footer-container">
@@ -223,8 +170,62 @@
         </div>
 
     </div>
-</footer>
+    </footer>
 
-  <script src="script.js"></script>
+
+ <div id="globalPlayer" class="player-bar">
+
+  <button id="fsMinimizeBtn">
+        <i class="fas fa-chevron-down"></i>
+    </button>
+    
+    <canvas id="audioVisualizer"></canvas>
+
+    <div class="player-content">
+        
+        <div class="track-info">
+            <div class="img-wrapper"> <img id="playerImg" src="" alt="" class="hidden">
+            </div>
+            <div class="track-details">
+                <span id="playerTitle">Select a track</span>
+                <span id="playerArtist">...</span>
+                <span id="playerAlbum"></span>
+            </div>
+        </div>
+
+        <div class="custom-controls">
+            
+            <div class="corner-fold-btn" id="togglePlayerBtn">
+                <i class="fas fa-expand-alt"></i>
+            </div>
+
+            <div class="controls-row main-controls">
+                <button id="prevTrackBtn" class="neon-btn small-control"><i class="fas fa-step-backward"></i></button>
+                <button id="playPauseBtn" class="neon-btn play-large"><i class="fas fa-play"></i></button>
+                <button id="nextTrackBtn" class="neon-btn small-control"><i class="fas fa-step-forward"></i></button>
+              </div>
+
+            <div class="controls-row progress-row">
+                <span id="currentTimeText">0:00</span>
+                <input type="range" id="progressBar" value="0" min="0" max="100" step="1">
+                <span id="durationText">0:30</span>
+            </div>
+
+           <div class="controls-row bottom-extras">
+    <div class="volume-container" id="volumeContainer">
+        <button id="toggleVolumeBtn" class="ghost-btn vol-btn">
+            <i class="fas fa-volume-up"></i>
+        </button>
+        <input type="range" id="volumeBar" value="100" min="0" max="100">
+    </div>
+
+   <button id="progressiveBtn" class="ghost-btn vol-btn" title="Repetir Canción (Loop)">
+        <i class="fas fa-repeat"></i>
+    </button>
+        </div>
+        <audio id="mainAudio" crossorigin="anonymous" preload="auto"></audio>
+    </div> 
+    </div>
+<script src="script.js"></script>
 </body>
 </html>
